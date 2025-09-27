@@ -9,15 +9,17 @@ const postStore = usePostStore();
 </script>
 
 <template>
-  <nav v-show="postStore.pageCount > 1" aria-label="Paginate me">
+  <nav v-show="postStore.pageCount > 1" aria-label="Paginate me" data-test="pagination-navigation">
     <ul class="flex gap-x-0.5 sm:gap-x-1">
       <PaginationButton
+        data-test="pagination-prev-button"
         label="<"
         :callback="postStore.getPreviousPage"
         :disabled="!postStore.previousPage"
       />
       <li v-for="n in postStore.pageCount" :key="n">
         <button
+          data-test="pagination-page-button"
           v-show="n !== postStore.currentPage"
           class="btn btn-square btn-ghost btn-sm text-sm active:bg-secondary"
           @click="
@@ -33,6 +35,7 @@ const postStore = usePostStore();
         </button>
         <!-- keep bg-secondary. Somehow button happen to become muted faster than active status works on not disabled button (above). That's strange -->
         <button
+          data-test="pagination-current-page-button"
           v-show="n === postStore.currentPage"
           class="btn btn-disabled btn-ghost btn-sm text-sm active:bg-secondary"
         >
@@ -46,6 +49,7 @@ const postStore = usePostStore();
         </span> -->
       </li>
       <PaginationButton
+        data-test="pagination-next-button"
         label=">"
         :callback="postStore.getNextPage"
         :disabled="!postStore.nextPage"
