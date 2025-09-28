@@ -1,0 +1,74 @@
+name: Build and Deploy Vue/Vite App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repo
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Read Node version from package.json
+        id: node_version
+        run: |
+          NODE_VERSION=$(jq -r '.engines.node' package.json)
+          echo "NODE_VERSION=${NODE_VERSION}" >> $GITHUB_ENV
+
+      # 2. Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Build the Vue/Vite app
+      - name: Build
+        run: npm run build
+
+      # 5. Push build artefacts to another repo
+      - name: Push build to artefacts repo
+        env:
+          TARGET_REPO: Vitalii-Kh95/Vitalii-Kh95.github.io      # replace with your target repo
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          # Configure Git
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          # Clone target repo
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/${TARGET_REPO}.git target-repo
+          
+          # Copy build artifacts
+          rm -rf target-repo/*
+          cp -r dist/* target-repo/
+
+          # Commit & push
+          if ! git diff --cached --quiet; then
+            git commit -m "Deploy build artifacts from main repo"
+            git push origin main
+          else
+            echo "No changes to deploy"
+          fi
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Update files on server
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}  << 'EOF'
+            cd /srv/blogfrontend/
+            git pull
+          EOF
