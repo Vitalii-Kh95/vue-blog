@@ -30,6 +30,7 @@ const headerTitle = computed(() => {
       class="m-auto flex h-full flex-col items-center justify-start gap-y-5 pt-12 text-center md:w-full md:max-w-none md:gap-y-8 md:pt-16"
     >
       <form
+        data-test="post-search-form"
         @submit.prevent="submit"
         role="search"
         class="join rounded-full border-base-content/20 has-[input:focus]:border"
@@ -37,6 +38,7 @@ const headerTitle = computed(() => {
         <!-- sprettier-ignore -->
         <label class="join-item relative flex items-center sm:max-w-none">
           <input
+            data-test="post-search-searchbox"
             v-model="searchInputText"
             type="search"
             name="q"
@@ -50,6 +52,7 @@ const headerTitle = computed(() => {
         </label>
 
         <button
+          data-test="post-search-submit-button"
           type="submit"
           class="btn btn-info join-item btn-sm min-h-12 rounded-r-full sm:btn-md md:btn-lg"
           :disabled="searchInputText.trim() === ''"
@@ -84,7 +87,10 @@ const headerTitle = computed(() => {
       </form> -->
 
       <div class="whitespace-nowrap">
-        <h1 class="text-2xl font-bold text-base-content/90 md:text-4xl">
+        <h1
+          class="text-2xl font-bold text-base-content/90 md:text-4xl"
+          data-test="post-search-heading"
+        >
           {{ headerTitle }}
         </h1>
       </div>
