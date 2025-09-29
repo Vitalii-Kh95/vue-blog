@@ -27,8 +27,10 @@ const posts = computed(() => {
     </div>
     <div v-for="(post, index) in posts" :key="post.id">
       <div class="card-body">
-        <router-link :to="{ name: 'blog-post-details', params: { slug: post.slug } }"
-          ><h3 class="card-title hover:underline">{{ post.title }}</h3></router-link
+        <router-link
+          :to="{ name: 'blog-post-details', params: { slug: post.slug } }"
+          class="card-title hover:underline"
+          >{{ post.title }}</router-link
         >
       </div>
       <figure class="">
