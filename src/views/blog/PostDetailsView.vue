@@ -28,7 +28,7 @@ onBeforeRouteUpdate(async (to, from) => {
   <div v-if="postStore.post">
     <div class="container mx-auto flex flex-col items-center px-6">
       <!-- no v-once as it can be changed via aside block -->
-      <Header :title="postStore.post.title" />
+      <Header data-test="blog-post-details-heading" :title="postStore.post.title" />
       <div class="mt-6 grid flex-1 grid-cols-3 gap-14 2xl:gap-20">
         <div class="col-span-full xl:col-span-2">
           <img class="rounded" :src="postStore.post.image" alt="" />
@@ -37,17 +37,20 @@ onBeforeRouteUpdate(async (to, from) => {
 
           <p class="font-serif text-xl">{{ postStore.post.content }}</p>
           <div class="mt-5 flex flex-wrap-reverse justify-end gap-1">
-            <span v-for="tag in postStore.post.tags" :key="tag.name">
-              <TagBadge :tag="tag" />
+            <span data-test="post-tags" v-for="tag in postStore.post.tags" :key="tag.name">
+              <TagBadge data-test="post-tag-link" :tag="tag" />
             </span>
           </div>
           <div class="divider mb-3"></div>
 
           <div class="flex items-center justify-between pb-4">
-            <router-link class="btn btn-primary rounded-xl" :to="{ name: 'blog' }"
+            <router-link
+              data-test="go-back-link"
+              class="btn btn-primary rounded-xl"
+              :to="{ name: 'blog' }"
               >Go Back</router-link
             >
-            <span class="ps-2"
+            <span class="ps-2" data-test="post-published-date"
               >Published: {{ new Date(postStore.post.created_at).toLocaleString() }}</span
             >
           </div>
@@ -58,5 +61,5 @@ onBeforeRouteUpdate(async (to, from) => {
       </div>
     </div>
   </div>
-  <NotFound v-else return-route-name="blog" />
+  <NotFound data-test="not-found" v-else return-route-name="blog" />
 </template>

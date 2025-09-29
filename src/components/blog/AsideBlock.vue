@@ -21,27 +21,39 @@ const posts = computed(() => {
 // if not posts.length = 4 getposts limit 1 offset 3
 </script>
 <template>
-  <div class="card h-fit overflow-hidden border bg-base-100 shadow-xl">
+  <div class="card h-fit overflow-hidden border bg-base-100 shadow-xl" data-test="aside-block">
     <div class="bg-neutral/90 p-5 text-neutral-content">
-      <h1 class="text-center text-3xl font-bold">Last posts</h1>
+      <h1 class="text-center text-3xl font-bold" data-test="aside-block-heading">Last posts</h1>
     </div>
-    <div v-for="(post, index) in posts" :key="post.id">
+    <div v-for="(post, index) in posts" :key="post.id" data-test="aside-block-post-card">
       <div class="card-body">
         <router-link
+          data-test="aside-block-post-card-title-link"
           :to="{ name: 'blog-post-details', params: { slug: post.slug } }"
           class="card-title hover:underline"
           >{{ post.title }}</router-link
         >
       </div>
       <figure class="">
-        <img class="max-h-[200px] w-full object-cover" :src="post.image" alt="Shoes" />
+        <img
+          class="max-h-[200px] w-full object-cover"
+          data-test="aside-block-post-card-preview-image"
+          :src="post.image"
+          alt="Shoes"
+        />
       </figure>
       <div class="card-body">
-        <div class="line-clamp-4 h-[100px] text-ellipsis">{{ post.description }}</div>
+        <div
+          data-test="aside-block-post-card-description"
+          class="line-clamp-4 h-[100px] text-ellipsis"
+        >
+          {{ post.description }}
+        </div>
         <div class="card-actions">
           <router-link
             :to="{ name: 'blog-post-details', params: { slug: post.slug } }"
             class="link link-secondary"
+            data-test="aside-block-post-card-read-more-link"
             >Read More</router-link
           >
         </div>
