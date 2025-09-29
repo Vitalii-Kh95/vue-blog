@@ -7,6 +7,8 @@ import TagBadge from './TagBadge.vue';
 <template>
   <TransitionGroup
     tag="div"
+    v-bind="$attrs"
+    data-test="post-cards"
     class="grid grid-cols-1 gap-10 lg:grid-cols-2 xl:grid-cols-3"
     enter-active-class="transition-opacity duration-300 ease-out"
     leave-active-class="transition-opacity duration-300 ease-out"
@@ -25,7 +27,7 @@ import TagBadge from './TagBadge.vue';
         class="h-[30vh] rounded-t-lg object-cover"
         :src="post.image"
         alt=""
-        data-test="post-card-image"
+        data-test="post-card-preview-image"
       />
       <div class="card-body justify-between px-6 pb-1 pt-6 text-base-content">
         <h5 class="card-title" data-test="post-card-heading">{{ post.title }}</h5>
