@@ -28,7 +28,7 @@ onBeforeRouteUpdate(async (to, from) => {
   <div v-if="postStore.post">
     <div class="container mx-auto flex flex-col items-center px-6">
       <!-- no v-once as it can be changed via aside block -->
-      <Header data-test="blog-post-details-heading" :title="postStore.post.title" />
+      <Header data-test="blog-post-details-header" :title="postStore.post.title" />
       <div class="mt-6 grid flex-1 grid-cols-3 gap-14 2xl:gap-20">
         <div class="col-span-full xl:col-span-2">
           <img class="rounded" :src="postStore.post.image" alt="" />

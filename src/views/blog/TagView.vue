@@ -20,12 +20,12 @@ onBeforeRouteUpdate(async (to, from) => {
 <template>
   <div class="">
     <div class="container mx-auto flex w-full flex-col items-center">
-      <Header class="md:py-5" :title="`#${route.params.slug}`" />
+      <Header class="md:py-5" :title="`#${route.params.slug}`" data-test="tag-header" />
       <div v-if="postStore.posts.length > 0" class="flex flex-col items-center px-6">
         <PostCards class="my-5" :posts="postStore.posts" />
         <Pagination class="mb-4 mt-1" />
       </div>
-      <h1 v-else class="mx-auto pt-10 text-4xl text-error">No results</h1>
+      <h1 v-else class="mx-auto pt-10 text-4xl text-error" data-test="tag-not-found">No results</h1>
     </div>
   </div>
 </template>
