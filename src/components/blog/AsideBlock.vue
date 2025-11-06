@@ -1,23 +1,25 @@
 <script setup>
-import { usePostStore } from '@/stores/PostStore';
-import { useRoute } from 'vue-router';
-import { computed } from 'vue';
+defineProps(['posts']);
+// import { usePostStore } from '@/stores/PostStore';
+// import { useRoute } from 'vue-router';
+// import { computed } from 'vue';
 
-const route = useRoute();
+// const route = useRoute();
 
-const postStore = usePostStore();
-postStore.getPosts({ limit: 5 });
+// const postStore = usePostStore();
+// postStore.getPosts({ limit: 5 });
 
-const posts = computed(() => {
-  const filteredPosts = postStore.posts.filter((post) => post.slug !== route.params.slug);
+// const posts = computed(() => {
+//   const filteredPosts = postStore.posts.filter((post) => post.slug !== route.params.slug);
 
-  if (filteredPosts.length > 4) {
-    // If there are more than 4 posts, discard the extra post
-    return filteredPosts.slice(0, 4);
-  }
+//   if (filteredPosts.length > 4) {
+//     // If there are more than 4 posts, discard the extra post
+//     return filteredPosts.slice(0, 4);
+//   }
 
-  return filteredPosts;
-});
+//   return filteredPosts;
+// });
+
 // if not posts.length = 4 getposts limit 1 offset 3
 </script>
 <template>
