@@ -4,17 +4,30 @@ import Header from '@/components/blog/BlogHeader.vue';
 import NotFound from '@/components/NotFound.vue';
 import { usePostStore } from '@/stores/PostStore';
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
-import { onBeforeRouteUpdate } from 'vue-router';
-import { defineAsyncComponent } from 'vue';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { defineAsyncComponent, computed } from 'vue';
 
-// import { useRoute } from 'vue-router';
-// import { watch, onMounted } from 'vue';
-
-// const route = useRoute();
+const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const postStore = usePostStore();
 
-const AsideBlock = defineAsyncComponent(() => import('@/components/blog/AsideBlock.vue'));
+const postsForAsideBlock = computed(() => {
+  const filteredPosts = postStore.posts.filter((post) => post.slug !== route.params.slug);
+
+  if (filteredPosts.length < 1) {
+    return null;
+  }
+  if (filteredPosts.length > 4) {
+    // If there are more than 4 posts, discard the extra post
+    return filteredPosts.slice(0, 4);
+  }
+
+  return filteredPosts;
+});
+
+const AsideBlock = postsForAsideBlock.value
+  ? defineAsyncComponent(() => import('@/components/blog/AsideBlock.vue'))
+  : null;
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.slug !== from.params.slug) {
@@ -30,7 +43,7 @@ onBeforeRouteUpdate(async (to, from) => {
       <!-- no v-once as it can be changed via aside block -->
       <Header data-test="blog-post-details-header" :title="postStore.post.title" />
       <div class="mt-6 grid flex-1 grid-cols-3 gap-14 2xl:gap-20">
-        <div class="col-span-full xl:col-span-2">
+        <div :class="AsideBlock ? 'col-span-full xl:col-span-2' : 'col-span-full xl:mx-40'">
           <img class="rounded" :src="postStore.post.image" alt="" />
 
           <div class="divider"></div>
@@ -56,7 +69,11 @@ onBeforeRouteUpdate(async (to, from) => {
           </div>
         </div>
         <keep-alive>
-          <AsideBlock v-if="!breakpoints.smallerOrEqual('xl').value" />
+          <component
+            :is="AsideBlock"
+            v-if="!breakpoints.smallerOrEqual('xl').value"
+            :posts="postsForAsideBlock"
+          />
         </keep-alive>
       </div>
     </div>
