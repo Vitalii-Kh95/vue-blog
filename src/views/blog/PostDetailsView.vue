@@ -5,7 +5,8 @@ import NotFound from '@/components/NotFound.vue';
 import { usePostStore } from '@/stores/PostStore';
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
-import { defineAsyncComponent, computed, watchEffect } from 'vue';
+
+import { defineAsyncComponent, computed } from 'vue';
 
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -31,13 +32,6 @@ const AsideBlock = computed(() =>
     ? defineAsyncComponent(() => import('@/components/blog/AsideBlock.vue'))
     : null
 );
-
-watchEffect(() => {
-  console.log('posts count:', postStore.posts.length);
-  console.log('postsForAsideBlock (raw):', postsForAsideBlock.value);
-  console.log('postStore.post exists:', !!postStore.post);
-  console.log('breakpoint xl?:', breakpoints.smallerOrEqual('xl').value);
-});
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.slug !== from.params.slug) {
