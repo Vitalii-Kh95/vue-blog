@@ -3,8 +3,6 @@
     "include": [
         "src/**/*",
         "src/**/*.vue",
-        "legacy/FlexibleBlock.vue",
-        "legacy_code/TheLanguages.vue"
     ],
     "exclude": [
         "node_modules",
