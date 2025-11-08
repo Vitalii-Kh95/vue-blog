@@ -64,7 +64,7 @@ onBeforeRouteUpdate(async (to, from) => {
               >Go Back</router-link
             >
             <span class="ps-2" data-test="post-published-date"
-              >Published: {{ new Date(postStore.post.created_at).toLocaleString() }}</span
+              >Published: {{ new Date(postStore.post.created_at).toLocaleDateString() }}</span
             >
           </div>
         </div>

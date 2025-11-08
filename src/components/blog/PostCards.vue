@@ -57,7 +57,7 @@ import TagBadge from './TagBadge.vue';
           >Read More
         </router-link>
         <p class="ps-2 text-end text-base-content" data-test="post-card-published">
-          Published: {{ new Date(post.created_at).toLocaleString() }}
+          Published: {{ new Date(post.created_at).toLocaleDateString() }}
         </p>
       </div>
     </div>
