@@ -33,7 +33,7 @@ function submit() {
 onBeforeRouteUpdate(async (to, from) => {
   if (to.query.q !== from.query.q) {
     await postStore.getPosts({ search: to.query.q });
-    document.title = `#${to.params.slug}`;
+    document.title = `Search "${to.query.q}"`;
   }
 });
 </script>
