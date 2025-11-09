@@ -62,6 +62,9 @@ export async function getPosts({
   tag = undefined,
   type = 'blog'
 }) {
+  if (offset % limit !== 0) {
+    throw new Error(`Invalid offset: ${offset}. It must be a multiple of limit: ${limit}`);
+  }
   const url = type === 'blog' ? new URL('posts/', baseURL) : null;
   if (!url) {
     throw new Error("URL couldn't be resolved!");

@@ -1,33 +1,78 @@
 <script setup>
 import PaginationButton from './paginationButton.vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePostStore } from '@/stores/PostStore';
+import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
 const route = useRoute();
-// it's an appendix from times I had projects view,
-// but I decided to keep it that way
 const postStore = usePostStore();
+const pageSize = 6;
+const buttonAmount = computed(() => {
+  if (breakpoints.greaterOrEqual('xl').value) {
+    return 11;
+  } else if (['lg', 'md'].includes(breakpoints.active().value)) {
+    return 9;
+  } else if (breakpoints.active().value === 'sm') {
+    return 7;
+  } else {
+    return 5;
+  }
+});
+
+const pageButtonsDisplayed = computed(() => {
+  const res = [];
+  const n = Math.min(buttonAmount.value, postStore.pageCount);
+  const allPages = Array.from({ length: postStore.pageCount }, (_, i) => i + 1);
+  let i = 1;
+  let step = 1;
+  while (res.length < n - 1) {
+    if (step % 2 === 0) {
+      if (allPages.includes(postStore.currentPage + i)) {
+        res.push(postStore.currentPage + i);
+      }
+      i++;
+      step++;
+    } else {
+      if (allPages.includes(postStore.currentPage - i)) {
+        res.push(postStore.currentPage - i);
+      }
+      step++;
+    }
+  }
+  res.push(postStore.currentPage);
+
+  return res.sort((a, b) => a - b);
+});
 </script>
 
 <template>
   <nav v-show="postStore.pageCount > 1" aria-label="Paginate me" data-test="pagination-navigation">
     <ul class="flex gap-x-0.5 sm:gap-x-1">
       <PaginationButton
+        data-test="pagination-first-button"
+        label="<<"
+        :callback="postStore.getPosts"
+        :disabled="!postStore.previousPage"
+      />
+      <PaginationButton
         data-test="pagination-prev-button"
         label="<"
         :callback="postStore.getPreviousPage"
         :disabled="!postStore.previousPage"
       />
-      <li v-for="n in postStore.pageCount" :key="n">
+      <li v-for="n in pageButtonsDisplayed" :key="n">
         <button
           data-test="pagination-page-button"
           v-if="n !== postStore.currentPage"
           class="btn btn-square btn-ghost btn-sm text-sm active:bg-secondary"
           @click="
             postStore.getPosts({
-              limit: 6,
-              offset: (n - 1) * 6,
+              limit: pageSize,
+              offset: (n - 1) * pageSize,
               search: route.query.q,
-              tag: route.name === `${type}-posts-by-tag` ? route.params.slug : undefined
+              tag: route.name === 'blog-posts-by-tag' ? route.params.slug : undefined
             })
           "
         >
@@ -41,17 +86,26 @@ const postStore = usePostStore();
         >
           {{ n }}
         </button>
-        <!-- <span
-          v-show="n === postStore.currentPage"
-          class="relative block rounded bg-base-300 px-3 py-1.5 text-sm font-medium"
-        >
-          {{ n }}
-        </span> -->
       </li>
       <PaginationButton
         data-test="pagination-next-button"
         label=">"
         :callback="postStore.getNextPage"
+        :disabled="!postStore.nextPage"
+      />
+      <PaginationButton
+        data-test="pagination-last-button"
+        label=">>"
+        :callback="
+          () =>
+            postStore.getPosts({
+              limit: pageSize,
+              offset:
+                postStore.count % pageSize > 0
+                  ? postStore.count - (postStore.count % pageSize)
+                  : postStore.count - pageSize
+            })
+        "
         :disabled="!postStore.nextPage"
       />
     </ul>
