@@ -22,28 +22,28 @@ const buttonAmount = computed(() => {
 });
 
 const pageButtonsDisplayed = computed(() => {
-  const res = [];
-  const n = Math.min(buttonAmount.value, postStore.pageCount);
-  const allPages = Array.from({ length: postStore.pageCount }, (_, i) => i + 1);
-  let i = 1;
-  let step = 1;
-  while (res.length < n - 1) {
-    if (step % 2 === 0) {
-      if (allPages.includes(postStore.currentPage + i)) {
-        res.push(postStore.currentPage + i);
-      }
-      i++;
-      step++;
-    } else {
-      if (allPages.includes(postStore.currentPage - i)) {
-        res.push(postStore.currentPage - i);
-      }
-      step++;
+  if (postStore.pageCount <= 1) return;
+
+  const ButtonAmount = Math.min(buttonAmount.value, postStore.pageCount);
+
+  const left = [];
+  const right = [];
+
+  let l = postStore.currentPage - 1;
+  let r = postStore.currentPage + 1;
+
+  while (left.length + right.length + 1 < ButtonAmount) {
+    if (l >= 1) {
+      left.push(l);
+      l--;
+      if (left.length + right.length + 1 >= ButtonAmount) break;
+    }
+    if (r <= postStore.pageCount) {
+      right.push(r);
+      r++;
     }
   }
-  res.push(postStore.currentPage);
-
-  return res.sort((a, b) => a - b);
+  return [...left.reverse(), postStore.currentPage, ...right];
 });
 </script>
 
