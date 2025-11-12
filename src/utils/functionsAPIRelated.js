@@ -29,6 +29,9 @@ export async function getCsrfToken() {
  * @returns {Promise<Object | void>} The post data or `undefined` if an error occurs
  */
 export async function getPost({ slug = undefined }) {
+  if (!slug) {
+    throw new TypeError('Slug is required');
+  }
   const basePath = 'posts/';
   const url = new URL(`${basePath}${slug ? `${slug}/` : ''}`, baseURL);
   try {
@@ -53,7 +56,7 @@ export async function getPost({ slug = undefined }) {
  * @param {string | undefined} [params.tag] The tag filter
  * @returns {Promise<Object | undefined>} The posts data
  */
-export async function getPosts({ limit = 6, offset = 0, search = undefined, tag = undefined }) {
+export async function getPosts({ limit = 6, offset = 0, search, tag } = {}) {
   if (offset % limit !== 0) {
     throw new Error(`Invalid offset: ${offset}. It must be a multiple of limit: ${limit}`);
   }
