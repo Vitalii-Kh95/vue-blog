@@ -32,8 +32,14 @@ function submit() {
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.query.q !== from.query.q) {
-    await postStore.getPosts({ search: to.query.q });
-    document.title = `Search "${to.query.q}"`;
+    if (to.query.q !== '') {
+      await postStore.getPosts({ search: to.query.q });
+      document.title = `Search "${to.query.q}"`;
+    } else {
+      document.title = 'Blog Search';
+      postStore.$reset();
+    }
+    searchInputText.value = '';
   }
 });
 </script>

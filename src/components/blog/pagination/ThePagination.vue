@@ -47,20 +47,22 @@ const pageButtonsDisplayed = computed(() => {
 });
 
 function patchInitialPaginationState() {
-  const vueState = window.history.state || {};
-  if (!vueState.pagination) {
-    window.history.replaceState(
-      {
-        ...vueState,
-        pagination: {
-          page: postStore.currentPage,
-          pageSize: postStore.pageSize,
-          filters: { q: route.query.q, tag: route.params.slug }
-        }
-      },
-      '',
-      window.location.href
-    );
+  if (postStore.pageCount > 1) {
+    const vueState = window.history.state || {};
+    if (!vueState.pagination) {
+      window.history.replaceState(
+        {
+          ...vueState,
+          pagination: {
+            page: postStore.currentPage,
+            pageSize: postStore.pageSize,
+            filters: { q: route.query.q, tag: route.params.slug }
+          }
+        },
+        '',
+        window.location.href
+      );
+    }
   }
 }
 
