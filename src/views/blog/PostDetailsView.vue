@@ -69,14 +69,12 @@ onBeforeRouteUpdate(async (to, from) => {
             >Published: {{ new Date(postStore.post.created_at).toLocaleDateString() }}</span
           >
         </div>
-        <keep-alive>
-          <component
-            :is="AsideBlock"
-            v-if="!breakpoints.smallerOrEqual('xl').value && AsideBlock"
-            :posts="postsForAsideBlock"
-          />
-        </keep-alive>
       </div>
+      <component
+        :is="AsideBlock"
+        v-if="!breakpoints.smallerOrEqual('xl').value && AsideBlock"
+        :posts="postsForAsideBlock"
+      />
     </div>
   </div>
   <NotFound data-test="not-found" v-else return-route-name="blog" />

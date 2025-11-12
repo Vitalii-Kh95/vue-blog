@@ -13,11 +13,10 @@ import { usePostStore } from '@/stores/PostStore';
 
 const postStore = usePostStore();
 
-function handlePopState(event) {
+async function handlePopState(event) {
   const state = event.state;
   if (state?.pagination) {
-    postStore.getPosts({ offset: (state.pagination.page - 1) * state.pagination.pageSize });
-    postStore.getPosts({
+    await postStore.getPosts({
       limit: state.pagination.pageSize,
       offset: (state.pagination.page - 1) * state.pagination.pageSize,
       search: state.pagination.filters?.q,

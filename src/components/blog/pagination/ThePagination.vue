@@ -1,6 +1,6 @@
 <script setup>
 import PaginationButton from './paginationButton.vue';
-import { computed, onMounted } from 'vue';
+import { computed, ref, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePostStore } from '@/stores/PostStore';
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
@@ -46,30 +46,60 @@ const pageButtonsDisplayed = computed(() => {
   return [...left.reverse(), postStore.currentPage, ...right];
 });
 
-function patchInitialPaginationState() {
-  if (postStore.pageCount > 1) {
-    const vueState = window.history.state || {};
-    if (!vueState.pagination) {
-      window.history.replaceState(
-        {
-          ...vueState,
-          pagination: {
-            page: postStore.currentPage,
-            pageSize: postStore.pageSize,
-            filters: { q: route.query.q, tag: route.params.slug }
-          }
-        },
-        '',
-        window.location.href
-      );
-    }
-  }
-}
+const seeded = ref(false);
 
-onMounted(() => {
-  // it runs after data fetching. Because fetching happens in beforeEnter hooks
-  patchInitialPaginationState();
-});
+// reset when route changes so we can seed again for a different page/listing
+
+// watch(
+//   [() => route.fullPath, () => postStore.pageCount],
+//   async ([fullPath, pageCount], [oldPath, oldCount]) => {
+//     // If route changed, allow re-seeding on the new route
+//     if (fullPath !== oldPath) {
+//       seeded.value = false;
+//     }
+
+//     if (!seeded.value && pageCount > 1) {
+//       // Wait a microtask to ensure all reactivity settled (the nextTick inside patch helps too)
+//       await nextTick();
+//       await patchInitialPaginationState(oldPath);
+//       seeded.value = true;
+//     }
+//   },
+//   { immediate: true, flush: 'post' }
+// );
+
+watch(
+  () => route.fullPath,
+  async () => {
+    // Reset seeded flag when navigating to a new route
+    seeded.value = false;
+
+    // Wait a tick to ensure pageCount is updated
+    await nextTick();
+
+    // Only seed if posts exist
+    if (postStore.pageCount > 1 && !seeded.value) {
+      const vueState = window.history.state || {};
+      if (!vueState.pagination) {
+        // Only replaceState here
+        window.history.replaceState(
+          {
+            ...vueState,
+            pagination: {
+              page: postStore.currentPage,
+              pageSize: postStore.pageSize,
+              filters: { q: route.query.q, tag: route.params.slug }
+            }
+          },
+          '',
+          window.location.href
+        );
+      }
+      seeded.value = true;
+    }
+  },
+  { immediate: true, flush: 'post' }
+);
 
 async function withPaginationHandler(fn, args) {
   // I can't really get arguments which end up in function.
