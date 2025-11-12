@@ -34,6 +34,7 @@ const router = createRouter({
     },
     {
       path: '/blog',
+      component: () => import('../views/blog/BlogLayout.vue'),
       meta: { blog: true },
       children: [
         {

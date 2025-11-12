@@ -26,11 +26,13 @@ export async function getCsrfToken() {
  *
  * @param {Object} params The parameters for fetching a post
  * @param {string} [params.slug] The slug of the post
- * @param {string} [params.type='blog'] The type of post ('blog' or other types)
  * @returns {Promise<Object | void>} The post data or `undefined` if an error occurs
  */
-export async function getPost({ slug = undefined, type = 'blog' }) {
-  const basePath = type === 'blog' ? 'posts/' : null;
+export async function getPost({ slug = undefined }) {
+  if (!slug) {
+    throw new TypeError('Slug is required');
+  }
+  const basePath = 'posts/';
   const url = new URL(`${basePath}${slug ? `${slug}/` : ''}`, baseURL);
   try {
     const response = await fetch(url);
@@ -52,20 +54,13 @@ export async function getPost({ slug = undefined, type = 'blog' }) {
  * @param {number} [params.offset=0] The offset for pagination
  * @param {string | undefined} [params.search] The search query
  * @param {string | undefined} [params.tag] The tag filter
- * @param {string} [params.type='blog'] The type of post ('blog' or other types)
  * @returns {Promise<Object | undefined>} The posts data
  */
-export async function getPosts({
-  limit = 6,
-  offset = 0,
-  search = undefined,
-  tag = undefined,
-  type = 'blog'
-}) {
+export async function getPosts({ limit = 6, offset = 0, search, tag } = {}) {
   if (offset % limit !== 0) {
     throw new Error(`Invalid offset: ${offset}. It must be a multiple of limit: ${limit}`);
   }
-  const url = type === 'blog' ? new URL('posts/', baseURL) : null;
+  const url = new URL('posts/', baseURL);
   if (!url) {
     throw new Error("URL couldn't be resolved!");
   }

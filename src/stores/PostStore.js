@@ -25,7 +25,7 @@ export const usePostStore = defineStore('postStore', {
   },
 
   actions: {
-    async getPosts({ limit = 6, offset = 0, search = undefined, tag = undefined }) {
+    async getPosts({ limit = 6, offset = 0, search, tag } = {}) {
       this.pageSize = limit;
       this.currentPage = offset / limit + 1;
       ({

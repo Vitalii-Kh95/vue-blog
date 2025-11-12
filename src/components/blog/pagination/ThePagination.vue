@@ -1,6 +1,6 @@
 <script setup>
 import PaginationButton from './paginationButton.vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePostStore } from '@/stores/PostStore';
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
@@ -45,6 +45,49 @@ const pageButtonsDisplayed = computed(() => {
   }
   return [...left.reverse(), postStore.currentPage, ...right];
 });
+
+function patchInitialPaginationState() {
+  const vueState = window.history.state || {};
+  if (!vueState.pagination) {
+    window.history.replaceState(
+      {
+        ...vueState,
+        pagination: {
+          page: postStore.currentPage,
+          pageSize: postStore.pageSize,
+          filters: { q: route.query.q, tag: route.params.slug }
+        }
+      },
+      '',
+      window.location.href
+    );
+  }
+}
+
+onMounted(() => {
+  // it runs after data fetching. Because fetching happens in beforeEnter hooks
+  patchInitialPaginationState();
+});
+
+async function withPaginationHandler(fn, args) {
+  // I can't really get arguments which end up in function.
+  // So I will work with aftermath (postStore states and URL)
+  await (args !== undefined ? fn(args) : fn());
+
+  const vueState = window.history.state || {};
+  window.history.pushState(
+    {
+      ...vueState,
+      pagination: {
+        page: postStore.currentPage,
+        pageSize: postStore.pageSize,
+        filters: { q: route.query.q, tag: route.params.slug }
+      }
+    },
+    '',
+    window.location.href
+  );
+}
 </script>
 
 <template>
@@ -53,13 +96,13 @@ const pageButtonsDisplayed = computed(() => {
       <PaginationButton
         data-test="pagination-first-button"
         label="<<"
-        :callback="postStore.getPosts"
+        @click="withPaginationHandler(postStore.getPreviousPage)"
         :disabled="!postStore.previousPage"
       />
       <PaginationButton
         data-test="pagination-prev-button"
         label="<"
-        :callback="postStore.getPreviousPage"
+        @click="withPaginationHandler(postStore.getPreviousPage)"
         :disabled="!postStore.previousPage"
       />
       <li v-for="n in pageButtonsDisplayed" :key="n">
@@ -68,7 +111,7 @@ const pageButtonsDisplayed = computed(() => {
           v-if="n !== postStore.currentPage"
           class="btn btn-square btn-ghost btn-sm text-sm active:bg-secondary"
           @click="
-            postStore.getPosts({
+            withPaginationHandler(postStore.getPosts, {
               limit: pageSize,
               offset: (n - 1) * pageSize,
               search: route.query.q,
@@ -90,21 +133,20 @@ const pageButtonsDisplayed = computed(() => {
       <PaginationButton
         data-test="pagination-next-button"
         label=">"
-        :callback="postStore.getNextPage"
+        @click="withPaginationHandler(postStore.getNextPage)"
         :disabled="!postStore.nextPage"
       />
       <PaginationButton
         data-test="pagination-last-button"
         label=">>"
-        :callback="
-          () =>
-            postStore.getPosts({
-              limit: pageSize,
-              offset:
-                postStore.count % pageSize > 0
-                  ? postStore.count - (postStore.count % pageSize)
-                  : postStore.count - pageSize
-            })
+        @click="
+          withPaginationHandler(postStore.getPosts, {
+            limit: pageSize,
+            offset:
+              postStore.count % pageSize > 0
+                ? postStore.count - (postStore.count % pageSize)
+                : postStore.count - pageSize
+          })
         "
         :disabled="!postStore.nextPage"
       />
