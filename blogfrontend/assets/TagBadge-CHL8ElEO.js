@@ -1,1 +1,0 @@
-import{v as s,s as a,p as n,m as r,e as g,t as m}from"./index-DZad7mRp.js";const i={__name:"TagBadge",props:["tag"],setup(e){return(c,t)=>{const o=s("router-link");return t[0]||(a(-1),(t[0]=n(o,{class:"badge badge-secondary font-medium",to:{name:"blog-posts-by-tag",params:{slug:e.tag}}},{default:r(()=>[g("#"+m(e.tag),1)]),_:1},8,["to"])).cacheIndex=0,a(1),t[0])}}};export{i as _};
