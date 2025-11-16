@@ -2,7 +2,6 @@ import { fileURLToPath, URL } from 'node:url';
 import os from 'os';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import tailwindcss from '@tailwindcss/vite';
 
 function getLocalIPAddress() {
   const interfaces = os.networkInterfaces();
@@ -24,7 +23,7 @@ export default defineConfig(() => {
       __USE_HTTPS__: false,
       __HOST_IP__: JSON.stringify(getLocalIPAddress())
     },
-    plugins: [vue(), tailwindcss()],
+    plugins: [vue()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url))

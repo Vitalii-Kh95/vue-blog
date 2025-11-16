@@ -4,9 +4,9 @@
 export const baseURL =
   import.meta.env.MODE === 'production'
     ? 'https://kholmukhamedov-vitalii.com/api/'
-    : import.meta.env.__USE_HTTPS__
-      ? `https://${import.meta.env.__HOST_IP__}:8000/api/`
-      : `http://${import.meta.env.__HOST_IP__}:8000/api/`;
+    : __USE_HTTPS__
+      ? `https://${__HOST_IP__}:8000/api/`
+      : `http://${__HOST_IP__}:8000/api/`;
 // : `https://${__HOST_IP__}:8000/api/`;
 
 // export const baseURL = 'https://kholmukhamedov-vitalii.com/api/';
