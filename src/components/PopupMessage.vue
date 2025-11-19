@@ -21,8 +21,8 @@ import { ref, onBeforeUnmount } from 'vue';
 
 const faded = ref(false);
 
-let fadeTimeout = setTimeout(() => fadeOut(), 1000); // Start fade-out earlier
-let autoCloseTimeout = setTimeout(() => closePopup(), 6000);
+const fadeTimeout = setTimeout(() => fadeOut(), 1000); // Start fade-out earlier
+const autoCloseTimeout = setTimeout(() => closePopup(), 6000);
 
 function fadeOut() {
   faded.value = true; // Start fade-out effect
