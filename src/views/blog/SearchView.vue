@@ -55,22 +55,22 @@ onBeforeRouteUpdate(async (to, from) => {
       >
         <form
           data-test="post-search-form"
-          @submit.prevent="submit"
           role="search"
           class="join rounded-full border-base-content/20 has-[input:focus]:border"
+          @submit.prevent="submit"
         >
           <label class="join-item relative flex items-center sm:max-w-none">
             <input
-              data-test="post-search-searchbox"
               v-model="searchInputText"
+              data-test="post-search-searchbox"
               type="search"
               name="q"
               placeholder="Search"
               class="input w-56 rounded-s-full border border-base-content/20 pe-8 ps-4 text-lg md:input-lg focus:outline-none focus:ring-0 sm:w-64 md:w-80 md:pe-12 lg:w-96"
             />
             <div
-              v-html="IconSearch"
               class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 opacity-50 *:top-1/2 *:h-4 *:w-4 md:*:h-5 md:*:w-5"
+              v-html="IconSearch"
             />
           </label>
 

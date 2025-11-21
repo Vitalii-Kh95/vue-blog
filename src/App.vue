@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
       <RouterView class="h-full overflow-auto" />
     </div>
     <!-- <RouterView class="flex-1 pt-[--menu-height]" /> -->
-    <component v-if="healthStore.usePopups" :is="PopupManager" />
+    <component :is="PopupManager" v-if="healthStore.usePopups" />
   </div>
 </template>
 

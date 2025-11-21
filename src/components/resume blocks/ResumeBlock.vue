@@ -8,7 +8,7 @@
     </keep-alive> -->
 
     <!-- gradient header -->
-    <div class="" v-show="['sm', 'md'].includes(breakpoints.active().value)">
+    <div v-show="['sm', 'md'].includes(breakpoints.active().value)" class="">
       <div class="rounded-lg p-2 text-center">
         <h1 class="text-2xl font-bold">{{ title }}</h1>
       </div>

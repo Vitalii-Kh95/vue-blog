@@ -58,7 +58,7 @@ defineExpose({ showModal, close });
             <span class="label-text">Username:</span>
           </div>
           <label class="input input-bordered flex items-center gap-2">
-            <div v-html="IconUsername" class="h-4 w-4 shrink-0" />
+            <div class="h-4 w-4 shrink-0" v-html="IconUsername" />
             <input type="text" name="username" autocomplete="on" class="grow" />
           </label>
           <p v-if="usernameError" class="pt-1 text-sm text-red-500">
@@ -70,7 +70,7 @@ defineExpose({ showModal, close });
             <span class="label-text">Email:</span>
           </div>
           <label class="input input-bordered flex items-center gap-2">
-            <div v-html="IconEmail" class="h-4 w-4 shrink-0" />
+            <div class="h-4 w-4 shrink-0" v-html="IconEmail" />
             <input type="text" name="email" autocomplete="on" class="grow" />
           </label>
           <p v-if="emailError" class="pt-1 text-sm text-red-500">
@@ -82,7 +82,7 @@ defineExpose({ showModal, close });
             <span class="label-text">Password:</span>
           </div>
           <label class="input input-bordered flex items-center gap-2">
-            <div v-html="IconPasswordKey" class="h-4 w-4 shrink-0" />
+            <div class="h-4 w-4 shrink-0" v-html="IconPasswordKey" />
             <input type="password" name="password" class="grow" value="" />
           </label>
           <p v-if="passwordError" class="pt-1 text-sm text-red-500">
@@ -94,7 +94,7 @@ defineExpose({ showModal, close });
             <span class="label-text">Confirm password:</span>
           </div>
           <label class="input input-bordered flex items-center gap-2">
-            <div v-html="IconPasswordKey" class="h-4 w-4 shrink-0" />
+            <div class="h-4 w-4 shrink-0" v-html="IconPasswordKey" />
             <input type="password" name="password_confirm" class="grow" value="" />
           </label>
           <p v-if="passwordConfirmError" class="pt-1 text-sm text-red-500">

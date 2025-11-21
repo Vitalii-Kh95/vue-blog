@@ -25,7 +25,7 @@ const closeDropdown = () => {
     <!-- mobile window size. Show menu as dropdown -->
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost rounded-2xl sm:hidden">
-        <span v-html="IconHamburger" class="*:mt-[3px] *:h-5 *:w-5" />
+        <span class="*:mt-[3px] *:h-5 *:w-5" v-html="IconHamburger" />
         <span class="text-xl font-medium text-neutral-content/80 sm:hidden">menu</span>
       </div>
       <ul

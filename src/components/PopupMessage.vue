@@ -8,8 +8,8 @@
     </span>
     <!-- text-error overriden by dark:btn-neutral unless !important -->
     <button
-      @click="closePopup(id)"
       class="btn btn-circle btn-sm border-none text-xl !text-error shadow-md dark:btn-neutral"
+      @click="closePopup(id)"
     >
       &times;
     </button>

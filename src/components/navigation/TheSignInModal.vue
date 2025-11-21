@@ -39,7 +39,7 @@ defineExpose({ showModal, close });
 <template>
   <dialog ref="modal" class="modal">
     <div class="modal-box w-1/6 min-w-max max-w-xl overflow-hidden">
-      <form @submit.prevent="login" class="flex flex-col gap-4">
+      <form class="flex flex-col gap-4" @submit.prevent="login">
         <h3 class="self-center text-lg font-bold">Sign In!</h3>
         <p v-if="generalError" class="text-red-500">
           {{ generalError }}
@@ -49,7 +49,7 @@ defineExpose({ showModal, close });
             <span class="label-text">Username or Email:</span>
           </div>
           <label class="input input-bordered flex items-center gap-2">
-            <div v-html="IconUsername" class="h-4 w-4 shrink-0" />
+            <div class="h-4 w-4 shrink-0" v-html="IconUsername" />
             <input type="text" name="username" class="grow" autocomplete="on" />
           </label>
           <p v-if="usernameError" class="pt-1 text-sm text-red-500">
@@ -61,7 +61,7 @@ defineExpose({ showModal, close });
             <span class="label-text">Password:</span>
           </div>
           <label class="input input-bordered flex items-center gap-2">
-            <div v-html="IconPasswordKey" class="h-4 w-4 shrink-0" />
+            <div class="h-4 w-4 shrink-0" v-html="IconPasswordKey" />
             <input type="password" class="grow" name="password" value="" />
           </label>
           <p v-if="passwordError" class="pt-1 text-sm text-red-500">

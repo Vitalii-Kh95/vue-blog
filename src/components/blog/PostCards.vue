@@ -24,8 +24,8 @@ import TagBadge from './TagBadge.vue';
   >
     <div
       v-for="post in posts"
-      data-test="post-card"
       :key="post.id"
+      data-test="post-card"
       class="group card flex flex-col rounded-lg shadow-2xl sm:shrink-0 sm:grow sm:basis-0"
     >
       <img

@@ -23,7 +23,7 @@ defineProps<Props>();
 
       <!-- Content -->
       <div class="flex gap-2 overflow-hidden rounded ps-1 pt-4">
-        <div v-html="item.icon" class="h-7 w-7 shrink-0" />
+        <div class="h-7 w-7 shrink-0" v-html="item.icon" />
         <div class="overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xl font-medium">
           {{ item.title }}
         </div>

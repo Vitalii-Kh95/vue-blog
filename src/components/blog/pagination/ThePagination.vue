@@ -128,19 +128,19 @@ async function withPaginationHandler(fn, args) {
       <PaginationButton
         data-test="pagination-first-button"
         label="<<"
-        @click="withPaginationHandler(postStore.getPreviousPage)"
         :disabled="!postStore.previousPage"
+        @click="withPaginationHandler(postStore.getPreviousPage)"
       />
       <PaginationButton
         data-test="pagination-prev-button"
         label="<"
-        @click="withPaginationHandler(postStore.getPreviousPage)"
         :disabled="!postStore.previousPage"
+        @click="withPaginationHandler(postStore.getPreviousPage)"
       />
       <li v-for="n in pageButtonsDisplayed" :key="n">
         <button
-          data-test="pagination-page-button"
           v-if="n !== postStore.currentPage"
+          data-test="pagination-page-button"
           class="btn btn-square btn-ghost btn-sm text-sm active:bg-secondary"
           @click="
             withPaginationHandler(postStore.getPosts, {
@@ -155,8 +155,8 @@ async function withPaginationHandler(fn, args) {
         </button>
         <!-- keep bg-secondary. Somehow button happen to become muted faster than active status works on not disabled button (above). That's strange -->
         <button
-          data-test="pagination-current-page-button"
           v-if="n === postStore.currentPage"
+          data-test="pagination-current-page-button"
           class="btn btn-disabled btn-ghost btn-sm text-sm active:bg-secondary"
         >
           {{ n }}
@@ -165,12 +165,13 @@ async function withPaginationHandler(fn, args) {
       <PaginationButton
         data-test="pagination-next-button"
         label=">"
-        @click="withPaginationHandler(postStore.getNextPage)"
         :disabled="!postStore.nextPage"
+        @click="withPaginationHandler(postStore.getNextPage)"
       />
       <PaginationButton
         data-test="pagination-last-button"
         label=">>"
+        :disabled="!postStore.nextPage"
         @click="
           withPaginationHandler(postStore.getPosts, {
             limit: pageSize,
@@ -180,7 +181,6 @@ async function withPaginationHandler(fn, args) {
                 : postStore.count - pageSize
           })
         "
-        :disabled="!postStore.nextPage"
       />
     </ul>
   </nav>

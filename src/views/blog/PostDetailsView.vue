@@ -52,7 +52,7 @@ onBeforeRouteUpdate(async (to, from) => {
 
         <p class="font-serif text-xl">{{ postStore.post.content }}</p>
         <div class="mt-5 flex flex-wrap-reverse justify-end gap-1">
-          <span data-test="post-tags" v-for="tag in postStore.post.tags" :key="tag">
+          <span v-for="tag in postStore.post.tags" :key="tag" data-test="post-tags">
             <TagBadge data-test="post-tag-link" :tag="tag" />
           </span>
         </div>
@@ -77,5 +77,5 @@ onBeforeRouteUpdate(async (to, from) => {
       />
     </div>
   </div>
-  <NotFound data-test="not-found" v-else return-route-name="blog" />
+  <NotFound v-else data-test="not-found" return-route-name="blog" />
 </template>

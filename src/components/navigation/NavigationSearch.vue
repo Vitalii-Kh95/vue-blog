@@ -10,13 +10,13 @@ function submit(form) {
 }
 </script>
 <template>
-  <form @submit.prevent="(form) => submit(form)" role="search" class="join rounded-full">
+  <form role="search" class="join rounded-full" @submit.prevent="(form) => submit(form)">
     <input
       type="search"
       name="q"
       class="input join-item input-bordered grow text-base-content focus:outline-2 focus:outline-transparent dark:bg-inherit"
       placeholder="Search"
     />
-    <button v-html="IconSearch" class="btn btn-info join-item *:h-5 *:w-5 *:opacity-50" />
+    <button class="btn btn-info join-item *:h-5 *:w-5 *:opacity-50" v-html="IconSearch" />
   </form>
 </template>
