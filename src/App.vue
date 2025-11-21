@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { RouterView } from 'vue-router';
 import TheNavigation from '@/components/navigation/TheNavigation.vue';
 import { useHealthStore } from '@/stores/HealthStore';

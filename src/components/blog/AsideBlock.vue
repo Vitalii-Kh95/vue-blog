@@ -1,5 +1,12 @@
-<script setup>
-defineProps(['posts']);
+<script setup lang="ts">
+import type { Post } from '@/types';
+
+interface Props {
+  posts: Array<Post>;
+}
+
+const { posts } = defineProps<Props>();
+
 // import { usePostStore } from '@/stores/PostStore';
 // import { useRoute } from 'vue-router';
 // import { computed } from 'vue';

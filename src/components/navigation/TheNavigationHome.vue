@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import ThemeSwitcher from './ThemeSwitcher.vue';
 import Menu from './NavigationMenu.vue';
 

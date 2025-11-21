@@ -7,6 +7,10 @@
   </router-link>
 </template>
 
-<script setup>
-defineProps(['tag']);
+<script setup lang="ts">
+import type { Post } from '@/types';
+interface Props {
+  tag: Post['tags'][number];
+}
+const { tag } = defineProps<Props>();
 </script>

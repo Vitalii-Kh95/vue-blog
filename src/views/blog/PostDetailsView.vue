@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import TagBadge from '@/components/blog/TagBadge.vue';
 import Header from '@/components/blog/BlogHeader.vue';
 import NotFound from '@/components/NotFound.vue';
 import { usePostStore } from '@/stores/PostStore';
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
-
+import { normalizeParam } from '@/utils/functionsAPIRelated';
 import { defineAsyncComponent, computed } from 'vue';
 
 const route = useRoute();
@@ -35,7 +35,7 @@ const AsideBlock = computed(() =>
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.slug !== from.params.slug) {
-    await postStore.getPost(to.params.slug);
+    await postStore.getPost(normalizeParam(to.params.slug));
     document.title = postStore.post.title || 'Blog Example';
   }
 });
@@ -52,7 +52,7 @@ onBeforeRouteUpdate(async (to, from) => {
 
         <p class="font-serif text-xl">{{ postStore.post.content }}</p>
         <div class="mt-5 flex flex-wrap-reverse justify-end gap-1">
-          <span data-test="post-tags" v-for="tag in postStore.post.tags" :key="tag.name">
+          <span data-test="post-tags" v-for="tag in postStore.post.tags" :key="tag">
             <TagBadge data-test="post-tag-link" :tag="tag" />
           </span>
         </div>

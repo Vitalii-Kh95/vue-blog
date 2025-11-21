@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 // import PortfolioCards from '@/components/portfolio/PortfolioCards.vue';
 import { projects } from '@/constants';
 </script>

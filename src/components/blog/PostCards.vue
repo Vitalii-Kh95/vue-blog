@@ -1,6 +1,11 @@
-<script setup>
-// import PostCard from './PostCard.vue';
-defineProps(['posts']);
+<script setup lang="ts">
+import type { Post } from '@/types';
+
+interface Props {
+  posts: Array<Post>;
+}
+
+const { posts } = defineProps<Props>();
 import TagBadge from './TagBadge.vue';
 </script>
 

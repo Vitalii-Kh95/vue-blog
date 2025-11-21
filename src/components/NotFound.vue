@@ -10,6 +10,9 @@
   </div>
 </template>
 
-<script setup>
-defineProps(['returnRouteName']);
+<script setup lang="ts">
+interface Props {
+  returnRouteName?: string;
+}
+const { returnRouteName } = defineProps<Props>();
 </script>

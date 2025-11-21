@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import PaginationButton from './paginationButton.vue';
 import { computed, ref, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';

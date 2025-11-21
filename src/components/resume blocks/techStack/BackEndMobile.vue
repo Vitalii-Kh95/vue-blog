@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import IconAPI from '@/assets/icons/IconAPI.min.svg?raw';
 import IconSQL from '@/assets/icons/IconSQL.min.svg?raw';
 import IconDjango from '@/assets/icons/IconDjango.min.svg?raw';

@@ -1,6 +1,9 @@
-<script setup>
-// In SearchView another specific header is used
-defineProps(['title']);
+<script setup lang="ts">
+interface Props {
+  title: string;
+}
+
+const { title } = defineProps<Props>();
 </script>
 
 <template>

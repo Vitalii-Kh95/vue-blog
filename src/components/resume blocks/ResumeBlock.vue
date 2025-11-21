@@ -46,13 +46,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // import GradientHeader from './GradientHeader.vue';
 // import RibbonHeader from './RibbonHeader.vue';
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
-defineProps({
-  title: String
-});
+
+interface Props {
+  title: string;
+}
+const { title } = defineProps<Props>();
 </script>

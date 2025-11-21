@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { usePostStore } from '@/stores/PostStore';
 import PostCards from '@/components/blog/PostCards.vue';
 import Pagination from '@/components/blog/pagination/ThePagination.vue';

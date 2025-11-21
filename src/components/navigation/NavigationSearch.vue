@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 import IconSearch from '@/assets/icons/IconSearch.min.svg?raw';
 const router = useRouter();

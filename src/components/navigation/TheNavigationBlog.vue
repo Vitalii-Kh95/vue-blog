@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SearchBox from './NavigationSearch.vue';
 import ProfileMenu from './NavigationProfileMenu.vue';
 import Menu from './NavigationMenu.vue';

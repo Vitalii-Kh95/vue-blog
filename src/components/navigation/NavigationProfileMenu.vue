@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import SignInModal from '@/components/navigation/TheSignInModal.vue';
 import SignUpModal from '@/components/navigation/TheSignUpModal.vue';

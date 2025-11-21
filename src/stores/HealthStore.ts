@@ -1,10 +1,17 @@
 import { defineStore } from 'pinia';
 import { baseURL } from '@/constants';
 
+interface HealthStoreState {
+  usePopups: boolean;
+  blogAPIStatus: 'ok' | 'error';
+  lastHealthCheck: number | null;
+  retryIntervalId: ReturnType<typeof setInterval> | null;
+}
+
 const RetryTimeInterval = 60000 * 3;
 
 export const useHealthStore = defineStore('healthStore', {
-  state: () => ({
+  state: (): HealthStoreState => ({
     usePopups: false,
     blogAPIStatus: 'ok', // Django returns 'ok' or 'error' in the data object
     lastHealthCheck: null,
@@ -14,7 +21,7 @@ export const useHealthStore = defineStore('healthStore', {
   actions: {
     // Fetch backend health status
     async fetchHealthStatus() {
-      let popupStore = null;
+      let popupStore: ReturnType<typeof import('./PopupStore').usePopupStore> | null = null;
       if (this.usePopups) {
         const { usePopupStore } = await import('./PopupStore');
         popupStore = usePopupStore();
@@ -32,25 +39,20 @@ export const useHealthStore = defineStore('healthStore', {
         if (this.blogAPIStatus === 'error') {
           throw new Error('Backend returned error');
         } else if (previousStatus === 'error' && this.blogAPIStatus === 'ok') {
-          if (this.usePopups) {
-            popupStore.show({
-              message: 'Backend is back online. All systems operational.',
-              type: 'alert-success'
-            });
-          }
+          popupStore!.show({
+            message: 'Backend is back online. All systems operational.',
+            type: 'alert-success'
+          });
           this.stopRetry();
         } else {
           // Here, means healthCheck is alright
         }
       } catch {
         this.blogAPIStatus = 'error';
-        if (this.usePopups) {
-          popupStore.show({
-            message:
-              'Backend is currently unavailable. Authentication and posts are not accessible.',
-            type: 'alert-error'
-          });
-        }
+        popupStore!.show({
+          message: 'Backend is currently unavailable. Authentication and posts are not accessible.',
+          type: 'alert-error'
+        });
         this.startRetry();
       }
     },

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 // import IconPasswordKey from '@/components/icons/IconPasswordKey.vue';
 // import IconUsername from '@/components/icons/IconUsername.vue';
 import IconPasswordKey from '@/assets/icons/IconPasswordKey.min.svg?raw';

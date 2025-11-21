@@ -1,10 +1,14 @@
-<script setup>
-defineProps({
-  items: {
-    type: Array,
-    required: true
-  }
-});
+<script setup lang="ts">
+interface TechStackItem {
+  title: string;
+  icon: string;
+}
+
+interface Props {
+  items: TechStackItem[];
+}
+
+defineProps<Props>();
 </script>
 
 <template>

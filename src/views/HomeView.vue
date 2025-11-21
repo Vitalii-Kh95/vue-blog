@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Contact from '@/components/resume blocks/TheContact.vue';
 import PersonalDetails from '@/components/resume blocks/PersonalDetails.vue';
 import Photo from '@/components/resume blocks/ThePhoto.vue';

@@ -1,13 +1,17 @@
 import { baseURL } from '@/constants';
+import type { Post, GetPostsParams } from '@/types';
+import type { LocationQueryValue } from 'vue-router';
+
+interface PostPageResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Array<Post>;
+}
 
 //////////////// CSRF and cookie /////////////////////////
 
-/**
- * Fetches the CSRF token from the server.
- *
- * @returns {Promise<string>} The CSRF token
- */
-export async function getCsrfToken() {
+export async function getCsrfToken(): Promise<string> {
   const url = new URL('csrf_token/', baseURL);
   const response = await fetch(url, {
     credentials: 'include'
@@ -18,17 +22,10 @@ export async function getCsrfToken() {
 }
 
 ///////////////// posts related functions ///////////////////////////
-// It's sorta appendix from when I had Projects view.
-// That was the reason I had these functions untied to stores
-// I think it's alright to keep it that way
 /**
  * Fetches a single post by slug.
- *
- * @param {Object} params The parameters for fetching a post
- * @param {string} [params.slug] The slug of the post
- * @returns {Promise<Object | void>} The post data or `undefined` if an error occurs
  */
-export async function getPost({ slug = undefined }) {
+export async function getPost({ slug = undefined }: { slug?: string }): Promise<Post | null> {
   if (!slug) {
     throw new TypeError('Slug is required');
   }
@@ -37,26 +34,25 @@ export async function getPost({ slug = undefined }) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+      return null;
     }
-    return await response.json();
+    const data = await response.json();
+    return data as Post;
   } catch (error) {
-    // @ts-ignore: Ignore the type error for 'unknown' type
     console.error(error.message);
+    return null;
   }
 }
 
 /**
  * Fetches a list of posts with pagination and filtering options.
- *
- * @param {Object} params The parameters for fetching posts
- * @param {number} [params.limit=6] The maximum number of posts to return
- * @param {number} [params.offset=0] The offset for pagination
- * @param {string | undefined} [params.search] The search query
- * @param {string | undefined} [params.tag] The tag filter
- * @returns {Promise<Object | undefined>} The posts data
  */
-export async function getPosts({ limit = 6, offset = 0, search, tag } = {}) {
+export async function getPosts({
+  limit = 6,
+  offset = 0,
+  search,
+  tag
+}: GetPostsParams = {}): Promise<PostPageResponse | null> {
   if (offset % limit !== 0) {
     throw new Error(`Invalid offset: ${offset}. It must be a multiple of limit: ${limit}`);
   }
@@ -79,28 +75,39 @@ export async function getPosts({ limit = 6, offset = 0, search, tag } = {}) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+      return null;
     }
     return await response.json();
   } catch (error) {
     // @ts-ignore: Ignore the type error for 'unknown' type
     console.error(error.message);
+    return null;
   }
 }
 
 /**
  * Parses URL search parameters into an object.
- *
- * @param {string} url The URL to parse
- * @returns {Promise<Object>} An object containing the parsed parameters
  */
-export async function parseUrlParams(url) {
+export function parseUrlParams(url: string | null | undefined): GetPostsParams {
+  if (!url) {
+    throw new TypeError('URL is undefined');
+  }
   const params = new URL(url).searchParams; // Extract search parameters from the URL
+  const limitRaw = params.get('limit');
+  const offsetRaw = params.get('offset');
   const result = {
-    limit: params.get('limit') || null,
-    offset: params.get('offset') || null,
-    search: params.get('search') || null,
-    tag: params.get('tag') || null
+    limit: limitRaw ? +limitRaw : undefined,
+    offset: offsetRaw ? +offsetRaw : undefined,
+    search: params.get('search') || undefined,
+    tag: params.get('tag') || undefined
   };
   return result;
+}
+
+export function normalizeParam(
+  value: string | string[] | LocationQueryValue | LocationQueryValue[] | null | undefined
+): string | undefined {
+  if (Array.isArray(value)) return value[0] ?? undefined;
+  if (typeof value === 'string') return value;
+  return undefined;
 }

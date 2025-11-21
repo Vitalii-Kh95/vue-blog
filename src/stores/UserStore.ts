@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { baseURL } from '@/constants';
 import { getCsrfToken } from '@/utils/functionsAPIRelated';
 
-async function apiCall(endpoint, options = {}) {
+async function apiCall(endpoint: string, options: RequestInit & { noCsrf?: boolean } = {}) {
   const url = new URL(endpoint, baseURL);
   const defaultHeaders = { 'Content-Type': 'application/json' };
 
@@ -23,11 +23,11 @@ async function apiCall(endpoint, options = {}) {
     return handleApiResponse(response);
   } catch (error) {
     console.error('Network error:', error);
-    return { status: 500, error: 'Network error' };
+    return { status: 500, data: null, ok: false, error: 'Network error' };
   }
 }
 
-async function handleApiResponse(response) {
+async function handleApiResponse(response: Response) {
   let data = null;
   if (response.status !== 204) {
     try {
@@ -48,17 +48,24 @@ async function handleApiResponse(response) {
   };
 }
 
-function extractDjangoErrors(data) {
+interface DjangoErrorResponse {
+  detail?: string;
+  [field: string]: string | string[] | undefined;
+}
+
+function extractDjangoErrors(data: unknown) {
   // Step 1: Ensure `data` is an object
   if (!data || typeof data !== 'object') return null;
 
+  const dataAsDjangoErrorResponse = data as DjangoErrorResponse;
+
   // Step 2: Handle DRF's general error messages under the "detail" field
-  if (data.detail) return { detail: data.detail };
+  if (dataAsDjangoErrorResponse.detail) return { detail: dataAsDjangoErrorResponse.detail };
 
   // Step 3: Process field-specific validation errors
-  const errors = {};
+  const errors: { [key: string]: string } = {};
 
-  for (const [field, message] of Object.entries(data)) {
+  for (const [field, message] of Object.entries(dataAsDjangoErrorResponse)) {
     // Handle array format (multiple messages for the same field)
     if (Array.isArray(message)) {
       errors[field] = message.join('; ');
@@ -91,7 +98,7 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    async register(username, email, password, passwordConfirm) {
+    async register(username: string, email: string, password: string, passwordConfirm: string) {
       this.errorMessage = {};
       const result = await apiCall('register/', {
         method: 'POST',
@@ -113,7 +120,7 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    async login(username, password) {
+    async login(username: string, password: string) {
       this.errorMessage = {};
       const result = await apiCall('login/', {
         method: 'POST',

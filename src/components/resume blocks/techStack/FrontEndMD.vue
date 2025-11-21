@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 // import IconJavaScript from '@/components/icons/IconJavaScript.vue';
 // import IconTypeScript from '@/components/icons/IconTypeScript.vue';
 // import IconVue from '@/components/icons/IconVue.vue';

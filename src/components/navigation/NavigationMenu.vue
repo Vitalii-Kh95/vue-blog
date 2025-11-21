@@ -1,11 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import IconHamburger from '@/assets/icons/IconHamburger.min.svg?raw';
-defineProps({
-  menuItems: {
-    type: Array,
-    required: true
-  }
-});
+
+interface MenuItem {
+  routeName: string;
+  displayedName: string;
+}
+
+interface Props {
+  menuItems: MenuItem[];
+}
+
+const { menuItems } = defineProps<Props>();
 
 const closeDropdown = () => {
   const elem = document.activeElement;

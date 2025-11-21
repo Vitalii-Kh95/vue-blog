@@ -7,13 +7,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue';
 import { usePostStore } from '@/stores/PostStore';
 
 const postStore = usePostStore();
 
-async function handlePopState(event) {
+async function handlePopState(event: PopStateEvent) {
   const state = event.state;
   if (state?.pagination) {
     await postStore.getPosts({

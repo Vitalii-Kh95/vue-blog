@@ -1,9 +1,11 @@
-<script setup>
-defineProps({
-  label: String,
-  callback: Function,
-  disabled: Boolean
-});
+<script setup lang="ts">
+interface Props {
+  label: string;
+  callback: () => void;
+  disabled: boolean;
+}
+
+const { label, callback, disabled } = defineProps<Props>();
 </script>
 
 <template>

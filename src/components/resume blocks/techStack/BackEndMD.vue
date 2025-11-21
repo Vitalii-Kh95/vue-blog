@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 // import IconPython from '@/components/icons/IconPython.vue';
 // import IconDjango from '@/components/icons/IconDjango.vue';
 // import IconSQL from '@/components/icons/IconSQL.vue';

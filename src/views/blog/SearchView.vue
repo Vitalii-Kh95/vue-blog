@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import { usePostStore } from '@/stores/PostStore';
@@ -33,7 +33,9 @@ function submit() {
 onBeforeRouteUpdate(async (to, from) => {
   if (to.query.q !== from.query.q) {
     if (to.query.q && to.query.q !== '') {
-      await postStore.getPosts({ search: to.query.q });
+      await postStore.getPosts({
+        search: (Array.isArray(to.query.q) ? to.query.q[0] : to.query.q) ?? undefined
+      });
       document.title = `Search "${to.query.q}"`;
     } else {
       document.title = 'Blog Search';

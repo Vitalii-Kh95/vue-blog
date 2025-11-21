@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useHealthStore } from '@/stores/HealthStore';
 
 const healthStore = useHealthStore();
