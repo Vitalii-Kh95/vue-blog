@@ -82,7 +82,7 @@ onBeforeRouteUpdate(async (to, from) => {
           <router-link
             data-test="go-back-link"
             class="btn btn-primary rounded-xl"
-            :to="{ name: 'blog' }"
+            :to="{ name: 'blog-home' }"
           >
             Go Back
           </router-link>

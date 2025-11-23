@@ -48,7 +48,9 @@ const closeDropdown = () => {
           <router-link
             :to="{ name: item.routeName }"
             class="text-lg"
-            :class="[$route.name === item.routeName ? 'pointer-events-none underline' : '']"
+            :class="{
+              'pointer-events-none underline': String($route.name).startsWith(item.routeName)
+            }"
           >
             {{ item.displayedName }}
           </router-link>
@@ -63,7 +65,7 @@ const closeDropdown = () => {
         :key="item.routeName"
         :to="{ name: item.routeName }"
         class="btn btn-ghost px-2 text-xl text-neutral-content"
-        :class="{ 'pointer-events-none underline': $route.name === item.routeName }"
+        :class="{ 'pointer-events-none underline': String($route.name).startsWith(item.routeName) }"
       >
         {{ item.displayedName }}
       </router-link>

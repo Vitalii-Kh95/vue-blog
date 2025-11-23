@@ -14,7 +14,7 @@ const route = useRoute();
 
 const menuItems = [
   { displayedName: 'back to portfolio', routeName: 'portfolio' },
-  { displayedName: 'home', routeName: 'blog' }
+  { displayedName: 'home', routeName: 'blog-home' }
 ];
 
 const displaySearch = computed(() => {

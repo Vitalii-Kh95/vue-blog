@@ -39,7 +39,7 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'blog',
+          name: 'blog-home',
           component: () => import('../views/blog/BlogView.vue'),
           meta: { title: 'Blog Example' },
           beforeEnter: async () => {
