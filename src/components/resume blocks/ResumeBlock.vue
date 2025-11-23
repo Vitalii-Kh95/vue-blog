@@ -8,13 +8,18 @@
     </keep-alive> -->
 
     <!-- gradient header -->
-    <div v-show="['sm', 'md'].includes(breakpoints.active().value)" class="">
+    <div
+      v-show="['sm', 'md'].includes(breakpoints.active().value)"
+      class=""
+    >
       <div class="rounded-lg p-2 text-center">
-        <h1 class="text-2xl font-bold">{{ title }}</h1>
+        <h1 class="text-2xl font-bold">
+          {{ title }}
+        </h1>
       </div>
       <div
         class="h-1 rounded-lg bg-gradient-to-r from-base-300 via-neutral to-base-300 p-0.5 text-center"
-      ></div>
+      />
     </div>
     <!-- /gradient header -->
 
@@ -27,7 +32,7 @@
       <!-- Fold Effect (Triangle Cut) -->
       <div
         class="absolute right-0 top-full h-[10px] w-[9px] bg-neutral/85 [clip-path:polygon(0_0,100%_0,0_100%)]"
-      ></div>
+      />
     </div>
     <!-- /ribbon header -->
 

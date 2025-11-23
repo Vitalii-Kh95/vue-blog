@@ -23,7 +23,10 @@ const displaySearch = computed(() => {
 </script>
 <template>
   <div class="navbar sticky top-0 z-20 bg-neutral px-0 py-0 text-neutral-content">
-    <Menu class="navbar-start ps-1" :menu-items="menuItems" />
+    <Menu
+      class="navbar-start ps-1"
+      :menu-items="menuItems"
+    />
 
     <div class="navbar-end flex-grow gap-2">
       <component

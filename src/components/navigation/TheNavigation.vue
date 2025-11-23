@@ -16,5 +16,5 @@ const navigationComponent = computed(() => {
 });
 </script>
 <template>
-  <component :is="navigationComponent"></component>
+  <component :is="navigationComponent" />
 </template>

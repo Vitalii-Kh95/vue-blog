@@ -17,7 +17,7 @@ function onCheckboxChange() {
       class="theme-controller"
       :checked="colorMode === 'light'"
       @change="onCheckboxChange"
-    />
+    >
     <svg
       class="swap-off h-10 w-10 fill-current"
       xmlns="http://www.w3.org/2000/svg"

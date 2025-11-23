@@ -15,9 +15,9 @@ const headerTitle = computed(() => {
   let resultString;
   if (!route.query.q) resultString = 'Search';
   else if (route.query.q && postStore.posts.length === 0)
-    resultString = `Nothing matched "${route.query.q}"`;
+    resultString = `Nothing matched "${String(route.query.q)}"`;
   else {
-    resultString = route.query.q;
+    resultString = String(route.query.q);
   }
   if (resultString.length > 29) return resultString.slice(0, 28) + '...';
   return resultString;
@@ -27,7 +27,7 @@ const searchInputText = ref('');
 
 function submit() {
   if (!searchInputText.value.trim()) return;
-  router.push({ name: 'blog-search', query: { q: searchInputText.value } });
+  void router.push({ name: 'blog-search', query: { q: searchInputText.value } });
 }
 
 onBeforeRouteUpdate(async (to, from) => {
@@ -36,7 +36,7 @@ onBeforeRouteUpdate(async (to, from) => {
       await postStore.getPosts({
         search: (Array.isArray(to.query.q) ? to.query.q[0] : to.query.q) ?? undefined
       });
-      document.title = `Search "${to.query.q}"`;
+      document.title = `Search "${String(to.query.q)}"`;
     } else {
       document.title = 'Blog Search';
       postStore.$reset();
@@ -96,7 +96,10 @@ onBeforeRouteUpdate(async (to, from) => {
     </div>
     <!-- /Header -->
     <div class="container mx-auto flex flex-col items-center px-6">
-      <PostCards class="my-5" :posts="postStore.posts" />
+      <PostCards
+        class="my-5"
+        :posts="postStore.posts"
+      />
       <Pagination class="mb-4 mt-1" />
     </div>
   </div>

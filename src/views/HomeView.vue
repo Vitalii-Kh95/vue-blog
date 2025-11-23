@@ -32,7 +32,7 @@ const breakpoints = useBreakpoints(breakpointsTailwind);
           class="grid grid-cols-[1fr_repeat(5,1fr)_0.5fr_1fr_0.5fr_1fr_1fr_0.5fr_1fr_0.5fr_repeat(5,1fr)_1fr] grid-rows-[repeat(7,auto)] items-center pb-1 pt-5 md:pt-8"
         >
           <!-- Left margin -->
-          <div class="col-span-1 row-span-7 h-full shrink-[2] basis-0"></div>
+          <div class="col-span-1 row-span-7 h-full shrink-[2] basis-0" />
           <div
             class="col-span-18 col-start-2 row-span-7 row-start-1 gap-y-3 text-center subgrid md:gap-y-5"
           >
@@ -74,7 +74,7 @@ const breakpoints = useBreakpoints(breakpointsTailwind);
             <!-- /TechStack -->
           </div>
           <!-- Right margin -->
-          <div class="col-span-1 col-start-20 row-span-7 h-full shrink-[2] basis-0"></div>
+          <div class="col-span-1 col-start-20 row-span-7 h-full shrink-[2] basis-0" />
         </div>
       </div>
     </section>

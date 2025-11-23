@@ -6,14 +6,14 @@ import { defineAsyncComponent, onBeforeUnmount, onMounted } from 'vue';
 
 const healthStore = useHealthStore();
 
-healthStore.fetchHealthStatus();
+await healthStore.fetchHealthStatus();
 
 const PopupManager = defineAsyncComponent(() => import('@/components/PopupManager.vue'));
 
 // Mobile viewport height fix
 function setMobileHeight() {
   const vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
+  document.documentElement.style.setProperty('--vh', `${String(vh)}px`);
 }
 
 onMounted(() => {
@@ -36,7 +36,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="flex flex-col" :style="{ height: 'calc(var(--vh, 1vh) * 100)' }">
+  <div
+    class="flex flex-col"
+    :style="{ height: 'calc(var(--vh, 1vh) * 100)' }"
+  >
     <!--
      sticky element (Navbar) is fixed only when it's in boundaries of initial parrent's height
      that is 100vh (h-screen)
@@ -49,7 +52,10 @@ onBeforeUnmount(() => {
       <RouterView class="h-full overflow-auto" />
     </div>
     <!-- <RouterView class="flex-1 pt-[--menu-height]" /> -->
-    <component :is="PopupManager" v-if="healthStore.usePopups" />
+    <component
+      :is="PopupManager"
+      v-if="healthStore.usePopups"
+    />
   </div>
 </template>
 

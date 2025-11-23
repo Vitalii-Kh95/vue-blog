@@ -10,7 +10,7 @@
       :message="popup.message"
       :type="popup.type"
       @close="handleClose"
-    ></Popup>
+    />
   </div>
 </template>
 
@@ -23,7 +23,7 @@ import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const popupStore = usePopupStore();
 
-const handleClose = (id) => {
+const handleClose = (id: symbol) => {
   popupStore.close(id); // Call the store's close method
 };
 const popupMaxWidth = ref(400);

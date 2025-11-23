@@ -7,11 +7,14 @@ import { useUserStore } from '@/stores/UserStore';
 import { ref, computed } from 'vue';
 
 const userStore = useUserStore();
-const modal = ref(null);
+const modal = ref<HTMLDialogElement | null>(null);
 
-async function login(event) {
-  const form = event.target.elements;
-  const logined = await userStore.login(form.username.value, form.password.value);
+async function login(event: Event) {
+  const formData = new FormData(event.target as HTMLFormElement);
+  const logined = await userStore.login(
+    formData.get('username') as string,
+    formData.get('password') as string
+  );
   if (logined) close();
 }
 // Extract errors from the store
@@ -20,7 +23,7 @@ const errors = computed(() =>
 );
 
 // Separate general error message (only show if it's a string)
-const generalError = computed(
+const generalError = computed<string>(
   () => errors.value['detail'] || errors.value['non_field_errors'] || ''
 );
 
@@ -37,11 +40,20 @@ defineExpose({ showModal, close });
 </script>
 
 <template>
-  <dialog ref="modal" class="modal">
+  <dialog
+    ref="modal"
+    class="modal"
+  >
     <div class="modal-box w-1/6 min-w-max max-w-xl overflow-hidden">
-      <form class="flex flex-col gap-4" @submit.prevent="login">
+      <form
+        class="flex flex-col gap-4"
+        @submit.prevent="login"
+      >
         <h3 class="self-center text-lg font-bold">Sign In!</h3>
-        <p v-if="generalError" class="text-red-500">
+        <p
+          v-if="generalError"
+          class="text-red-500"
+        >
           {{ generalError }}
         </p>
         <div>
@@ -49,10 +61,21 @@ defineExpose({ showModal, close });
             <span class="label-text">Username or Email:</span>
           </div>
           <label class="input input-bordered flex items-center gap-2">
-            <div class="h-4 w-4 shrink-0" v-html="IconUsername" />
-            <input type="text" name="username" class="grow" autocomplete="on" />
+            <div
+              class="h-4 w-4 shrink-0"
+              v-html="IconUsername"
+            />
+            <input
+              type="text"
+              name="username"
+              class="grow"
+              autocomplete="on"
+            />
           </label>
-          <p v-if="usernameError" class="pt-1 text-sm text-red-500">
+          <p
+            v-if="usernameError"
+            class="pt-1 text-sm text-red-500"
+          >
             {{ usernameError }}
           </p>
         </div>
@@ -61,19 +84,40 @@ defineExpose({ showModal, close });
             <span class="label-text">Password:</span>
           </div>
           <label class="input input-bordered flex items-center gap-2">
-            <div class="h-4 w-4 shrink-0" v-html="IconPasswordKey" />
-            <input type="password" class="grow" name="password" value="" />
+            <div
+              class="h-4 w-4 shrink-0"
+              v-html="IconPasswordKey"
+            />
+            <input
+              type="password"
+              class="grow"
+              name="password"
+              value=""
+            />
           </label>
-          <p v-if="passwordError" class="pt-1 text-sm text-red-500">
+          <p
+            v-if="passwordError"
+            class="pt-1 text-sm text-red-500"
+          >
             {{ passwordError }}
           </p>
         </div>
         <div class="modal-action flex justify-between">
           <form method="dialog">
             <!-- if there is a button in form, it will close the modal -->
-            <button class="btn" @click="close">Close</button>
+            <button
+              class="btn"
+              @click="close"
+            >
+              Close
+            </button>
           </form>
-          <button type="submit" class="btn btn-primary">Sign In</button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+          >
+            Sign In
+          </button>
         </div>
       </form>
     </div>

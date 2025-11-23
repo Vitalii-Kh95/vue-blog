@@ -26,10 +26,16 @@ async function handlePopState(event: PopStateEvent) {
 }
 
 onMounted(() => {
-  window.addEventListener('popstate', handlePopState);
+  window.addEventListener('popstate', (e) => {
+    handlePopState(e).catch((err: unknown) => {
+      console.error('popstate handler failed:', err);
+    });
+  });
 });
 
 onUnmounted(() => {
-  window.removeEventListener('popstate', handlePopState);
+  window.removeEventListener('popstate', (e) => {
+    void handlePopState(e);
+  });
 });
 </script>

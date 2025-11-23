@@ -9,18 +9,32 @@ import { SkillsDescription } from '@/constants';
 </script>
 
 <template>
-  <div v-once class="col-span-18 row-span-2 flex flex-col gap-1 px-1 text-start">
-    <h3 class="px-1 font-serif text-2xl font-bold md:text-3xl">Front-end</h3>
+  <div
+    v-once
+    class="col-span-18 row-span-2 flex flex-col gap-1 px-1 text-start"
+  >
+    <h3 class="px-1 font-serif text-2xl font-bold md:text-3xl">
+      Front-end
+    </h3>
     <div class="flex gap-x-1">
-      <div class="h-7 w-7 shrink-0" v-html="IconTypeScript" />
+      <div
+        class="h-7 w-7 shrink-0"
+        v-html="IconTypeScript"
+      />
       {{ SkillsDescription.frontend.typescript }}
     </div>
     <div class="flex gap-x-1">
-      <div class="mt-1 h-7 w-7 shrink-0" v-html="IconVue" />
+      <div
+        class="mt-1 h-7 w-7 shrink-0"
+        v-html="IconVue"
+      />
       {{ SkillsDescription.frontend.vue }}
     </div>
     <div class="flex gap-x-1">
-      <div class="mt-0.5 h-7 w-7 shrink-0" v-html="IconTailwind" />
+      <div
+        class="mt-0.5 h-7 w-7 shrink-0"
+        v-html="IconTailwind"
+      />
       {{ SkillsDescription.frontend.tailwind }}
     </div>
   </div>

@@ -39,7 +39,7 @@ export async function getPost({ slug = undefined }: { slug?: string }): Promise<
     const data = await response.json();
     return data as Post;
   } catch (error) {
-    console.error(error.message);
+    console.error((error as Error).message);
     return null;
   }
 }
@@ -54,12 +54,17 @@ export async function getPosts({
   tag
 }: GetPostsParams = {}): Promise<PostPageResponse | null> {
   if (offset % limit !== 0) {
-    throw new Error(`Invalid offset: ${offset}. It must be a multiple of limit: ${limit}`);
+    throw new Error(
+      `Invalid offset: ${String(offset)}. It must be a multiple of limit: ${String(limit)}`
+    );
   }
-  const url = new URL('posts/', baseURL);
-  if (!url) {
+  let url: URL;
+  try {
+    url = new URL('posts/', baseURL);
+  } catch {
     throw new Error("URL couldn't be resolved!");
   }
+
   if (limit) {
     url.searchParams.set('limit', limit.toString());
   }
@@ -79,8 +84,7 @@ export async function getPosts({
     }
     return await response.json();
   } catch (error) {
-    // @ts-ignore: Ignore the type error for 'unknown' type
-    console.error(error.message);
+    console.error((error as Error).message);
     return null;
   }
 }

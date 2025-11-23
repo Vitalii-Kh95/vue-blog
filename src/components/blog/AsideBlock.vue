@@ -2,7 +2,7 @@
 import type { Post } from '@/types';
 
 interface Props {
-  posts: Array<Post>;
+  posts: Array<Post> | null;
 }
 
 const { posts } = defineProps<Props>();
@@ -30,18 +30,31 @@ const { posts } = defineProps<Props>();
 // if not posts.length = 4 getposts limit 1 offset 3
 </script>
 <template>
-  <div class="card h-fit overflow-hidden border bg-base-100 shadow-xl" data-test="aside-block">
+  <div
+    class="card h-fit overflow-hidden border bg-base-100 shadow-xl"
+    data-test="aside-block"
+  >
     <div class="bg-neutral/90 p-5 text-neutral-content">
-      <h1 class="text-center text-3xl font-bold" data-test="aside-block-heading">Last posts</h1>
+      <h1
+        class="text-center text-3xl font-bold"
+        data-test="aside-block-heading"
+      >
+        Last posts
+      </h1>
     </div>
-    <div v-for="(post, index) in posts" :key="post.id" data-test="aside-block-post-card">
+    <div
+      v-for="(post, index) in posts"
+      :key="post.id"
+      data-test="aside-block-post-card"
+    >
       <div class="card-body">
         <router-link
           data-test="aside-block-post-card-title-link"
           :to="{ name: 'blog-post-details', params: { slug: post.slug } }"
           class="card-title hover:underline"
-          >{{ post.title }}</router-link
         >
+          {{ post.title }}
+        </router-link>
       </div>
       <figure class="">
         <img
@@ -63,10 +76,14 @@ const { posts } = defineProps<Props>();
             :to="{ name: 'blog-post-details', params: { slug: post.slug } }"
             class="link link-secondary"
             data-test="aside-block-post-card-read-more-link"
-            >Read More</router-link
           >
+            Read More
+          </router-link>
         </div>
-        <div v-if="index !== posts.length - 1" class="divider my-0"></div>
+        <div
+          v-if="posts && index !== posts.length - 1"
+          class="divider my-0"
+        />
       </div>
     </div>
   </div>

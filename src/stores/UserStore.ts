@@ -7,11 +7,17 @@ async function apiCall(endpoint: string, options: RequestInit & { noCsrf?: boole
   const defaultHeaders = { 'Content-Type': 'application/json' };
 
   const csrftoken = await getCsrfToken();
+  const normalizedHeaders =
+    options.headers instanceof Headers
+      ? Object.fromEntries(options.headers.entries())
+      : Array.isArray(options.headers)
+        ? Object.fromEntries(options.headers)
+        : options.headers || {};
 
   options.headers = {
     ...defaultHeaders,
     ...(options.noCsrf ? {} : { 'X-CSRFToken': csrftoken }),
-    ...(options.headers || {})
+    ...normalizedHeaders
   };
 
   try {
@@ -20,7 +26,7 @@ async function apiCall(endpoint: string, options: RequestInit & { noCsrf?: boole
       ...options
     });
 
-    return handleApiResponse(response);
+    return await handleApiResponse(response);
   } catch (error) {
     console.error('Network error:', error);
     return { status: 500, data: null, ok: false, error: 'Network error' };
@@ -42,7 +48,7 @@ async function handleApiResponse(response: Response) {
     data,
     error: response.ok
       ? null
-      : extractDjangoErrors(data) || { detail: `HTTP ${response.status} Error` },
+      : extractDjangoErrors(data) || { detail: `HTTP ${String(response.status)} Error` },
     ok: response.ok // there was some confusion when I expected returned object to act like object returned by fetch,
     // so I added this property to consolidate my confusion
   };
@@ -77,8 +83,14 @@ function extractDjangoErrors(data: unknown) {
   return Object.keys(errors).length ? errors : null;
 }
 
+interface UserStoreState {
+  loggedIn: boolean;
+  user: string | null;
+  errorMessage: Record<string, string>;
+}
+
 export const useUserStore = defineStore('userStore', {
-  state: () => ({
+  state: (): UserStoreState => ({
     loggedIn: false,
     user: null,
     errorMessage: {}
@@ -93,7 +105,8 @@ export const useUserStore = defineStore('userStore', {
       } else {
         this.loggedIn = false;
         this.user = null;
-        this.errorMessage = result.error || {};
+        this.errorMessage =
+          (typeof result.error === 'string' ? { detail: result.error } : result.error) || {};
         return false;
       }
     },
@@ -115,7 +128,8 @@ export const useUserStore = defineStore('userStore', {
         return true;
       } else {
         console.error('Login failed:', result.error);
-        this.errorMessage = result.error || {};
+        this.errorMessage =
+          typeof result.error === 'string' ? { detail: result.error } : result.error || {};
         return false;
       }
     },
@@ -149,7 +163,8 @@ export const useUserStore = defineStore('userStore', {
         }
       } else {
         console.warn('Login failed:', result.error);
-        this.errorMessage = result.error || {};
+        this.errorMessage =
+          typeof result.error === 'string' ? { detail: result.error } : result.error || {};
         return false;
       }
     },
@@ -164,7 +179,8 @@ export const useUserStore = defineStore('userStore', {
         console.log('Logout successful');
         return true;
       } else {
-        this.errorMessage = result.error || {};
+        this.errorMessage =
+          typeof result.error === 'string' ? { detail: result.error } : result.error || {};
         console.error('Logout error:', result.error);
         return false;
       }

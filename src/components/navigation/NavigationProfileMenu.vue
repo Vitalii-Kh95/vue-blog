@@ -5,24 +5,24 @@ import SignUpModal from '@/components/navigation/TheSignUpModal.vue';
 import { useUserStore } from '@/stores/UserStore';
 
 const userStore = useUserStore();
-userStore.fetchUserState();
+await userStore.fetchUserState();
 
-const signInModal = ref(null);
-const signUpModal = ref(null);
+const signInModal = ref<HTMLDialogElement | null>(null);
+const signUpModal = ref<HTMLDialogElement | null>(null);
 
 async function handleLogout() {
   const elem = document.activeElement;
   if (elem) {
-    elem?.blur();
+    (elem as HTMLElement).blur();
   }
   try {
     await userStore.logout();
   } catch (error) {
-    console.error('Unexpected error during logout:', error.message);
+    console.error('Unexpected error during logout:', (error as Error).message);
   }
 }
 
-function showModal(modalRef) {
+function showModal(modalRef: HTMLDialogElement | null) {
   userStore.errorMessage = '';
   modalRef?.showModal();
 }
@@ -47,7 +47,10 @@ function showModal(modalRef) {
       <li v-show="!userStore.loggedIn">
         <button @click="showModal(signUpModal)">Sign Up</button>
       </li>
-      <li v-show="userStore.loggedIn" @click="handleLogout">
+      <li
+        v-show="userStore.loggedIn"
+        @click="handleLogout"
+      >
         <button>Log Out</button>
       </li>
     </ul>

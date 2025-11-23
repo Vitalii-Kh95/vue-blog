@@ -56,8 +56,8 @@ const router = createRouter({
           beforeEnter: async (to) => {
             const postStore = usePostStore();
             if (to.query.q && to.query.q !== '') {
-              document.title = `Search "${to.query.q}"`;
-              await postStore.getPosts({ search: to.query.q });
+              document.title = `Search "${String(to.query.q)}"`;
+              await postStore.getPosts({ search: String(to.query.q) });
             } else {
               document.title = 'Blog Search';
               postStore.$reset();
@@ -71,8 +71,8 @@ const router = createRouter({
           meta: { skipAutoTitle: true },
           beforeEnter: async (to) => {
             const postStore = usePostStore();
-            await postStore.getPost(to.params.slug);
-            document.title = postStore.post.title || 'Blog Example';
+            await postStore.getPost(String(to.params.slug));
+            document.title = postStore.post?.title || 'Blog Example';
           }
         },
         {
@@ -82,8 +82,8 @@ const router = createRouter({
           meta: { skipAutoTitle: true },
           beforeEnter: async (to) => {
             const postStore = usePostStore();
-            await postStore.getPosts({ tag: to.params.slug });
-            document.title = `#${to.params.slug}`;
+            await postStore.getPosts({ tag: String(to.params.slug) });
+            document.title = `#${String(to.params.slug)} - Blog Example`;
           }
         }
       ]
@@ -106,7 +106,7 @@ const router = createRouter({
 router.afterEach((to) => {
   if (!to.meta.skipAutoTitle) {
     const defaultTitle = 'Kholmukhamedov Vitalii';
-    document.title = to.meta.title || defaultTitle;
+    document.title = String(to.meta.title) || defaultTitle;
   }
 });
 

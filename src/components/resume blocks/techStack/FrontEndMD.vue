@@ -35,7 +35,9 @@ const frontendItems = [
 
 <template>
   <div class="col-span-18 row-span-2 gap-1 text-start subgrid">
-    <h3 class="col-span-18 row-span-1 px-1 font-serif text-3xl font-bold">Front-end</h3>
+    <h3 class="col-span-18 row-span-1 px-1 font-serif text-3xl font-bold">
+      Front-end
+    </h3>
     <div class="col-span-18 row-span-1 p-3 subgrid">
       <FrontEndSkills class="col-span-12 xl:col-span-10" />
 

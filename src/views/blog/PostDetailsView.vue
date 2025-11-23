@@ -7,13 +7,14 @@ import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { normalizeParam } from '@/utils/functionsAPIRelated';
 import { defineAsyncComponent, computed } from 'vue';
+import type { Post } from '@/types';
 
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const postStore = usePostStore();
-postStore.getPosts({ limit: 5 });
+await postStore.getPosts({ limit: 5 });
 
-const postsForAsideBlock = computed(() => {
+const postsForAsideBlock = computed<Post[] | null>(() => {
   const filteredPosts = postStore.posts.filter((post) => post.slug !== route.params.slug);
 
   if (filteredPosts.length < 1) {
@@ -36,36 +37,58 @@ const AsideBlock = computed(() =>
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.slug !== from.params.slug) {
     await postStore.getPost(normalizeParam(to.params.slug));
-    document.title = postStore.post.title || 'Blog Example';
+    document.title = postStore.post?.title || 'Blog Example';
   }
 });
 </script>
 <template>
-  <div v-if="postStore.post" class="container mx-auto flex flex-col items-center px-6">
+  <div
+    v-if="postStore.post"
+    class="container mx-auto flex flex-col items-center px-6"
+  >
     <!-- no v-once as it can be changed via aside block -->
-    <Header data-test="blog-post-details-header" :title="postStore.post.title" />
+    <Header
+      data-test="blog-post-details-header"
+      :title="postStore.post.title"
+    />
     <div class="mt-6 grid flex-1 grid-cols-3 gap-14 2xl:gap-20">
       <div :class="AsideBlock ? 'col-span-full xl:col-span-2' : 'col-span-full xl:mx-40'">
-        <img class="rounded" :src="postStore.post.image" alt="" />
+        <img
+          class="rounded"
+          :src="postStore.post.image"
+          alt=""
+        />
 
-        <div class="divider"></div>
+        <div class="divider" />
 
-        <p class="font-serif text-xl">{{ postStore.post.content }}</p>
+        <p class="font-serif text-xl">
+          {{ postStore.post.content }}
+        </p>
         <div class="mt-5 flex flex-wrap-reverse justify-end gap-1">
-          <span v-for="tag in postStore.post.tags" :key="tag" data-test="post-tags">
-            <TagBadge data-test="post-tag-link" :tag="tag" />
+          <span
+            v-for="tag in postStore.post.tags"
+            :key="tag"
+            data-test="post-tags"
+          >
+            <TagBadge
+              data-test="post-tag-link"
+              :tag="tag"
+            />
           </span>
         </div>
-        <div class="divider mb-3"></div>
+        <div class="divider mb-3" />
 
         <div class="flex items-center justify-between pb-4">
           <router-link
             data-test="go-back-link"
             class="btn btn-primary rounded-xl"
             :to="{ name: 'blog' }"
-            >Go Back</router-link
           >
-          <span class="ps-2" data-test="post-published-date"
+            Go Back
+          </router-link>
+          <span
+            class="ps-2"
+            data-test="post-published-date"
             >Published: {{ new Date(postStore.post.created_at).toLocaleDateString() }}</span
           >
         </div>
@@ -77,5 +100,9 @@ onBeforeRouteUpdate(async (to, from) => {
       />
     </div>
   </div>
-  <NotFound v-else data-test="not-found" return-route-name="blog" />
+  <NotFound
+    v-else
+    data-test="not-found"
+    return-route-name="blog"
+  />
 </template>

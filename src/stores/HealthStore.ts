@@ -38,8 +38,8 @@ export const useHealthStore = defineStore('healthStore', {
 
         if (this.blogAPIStatus === 'error') {
           throw new Error('Backend returned error');
-        } else if (previousStatus === 'error' && this.blogAPIStatus === 'ok') {
-          popupStore!.show({
+        } else if (previousStatus === 'error') {
+          popupStore?.show({
             message: 'Backend is back online. All systems operational.',
             type: 'alert-success'
           });
@@ -49,7 +49,7 @@ export const useHealthStore = defineStore('healthStore', {
         }
       } catch {
         this.blogAPIStatus = 'error';
-        popupStore!.show({
+        popupStore?.show({
           message: 'Backend is currently unavailable. Authentication and posts are not accessible.',
           type: 'alert-error'
         });

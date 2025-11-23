@@ -12,10 +12,11 @@ const postStore = usePostStore();
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.slug !== from.params.slug) {
+    const slug = normalizeParam(to.params.slug);
     await postStore.getPosts({
-      tag: normalizeParam(to.params.slug)
+      tag: slug ? slug : undefined
     });
-    document.title = `#${normalizeParam(to.params.slug)}`;
+    document.title = `#${slug ? slug : 'Blog Example'} - My Blog`;
   }
 });
 </script>
@@ -27,10 +28,22 @@ onBeforeRouteUpdate(async (to, from) => {
       :title="`#${normalizeParam(route.params.slug)}`"
       data-test="tag-header"
     />
-    <div v-if="postStore.posts.length > 0" class="flex flex-col items-center px-6">
-      <PostCards class="my-5" :posts="postStore.posts" />
+    <div
+      v-if="postStore.posts.length > 0"
+      class="flex flex-col items-center px-6"
+    >
+      <PostCards
+        class="my-5"
+        :posts="postStore.posts"
+      />
       <Pagination class="mb-4 mt-1" />
     </div>
-    <h1 v-else class="mx-auto pt-10 text-4xl text-error" data-test="tag-not-found">No results</h1>
+    <h1
+      v-else
+      class="mx-auto pt-10 text-4xl text-error"
+      data-test="tag-not-found"
+    >
+      No results
+    </h1>
   </div>
 </template>

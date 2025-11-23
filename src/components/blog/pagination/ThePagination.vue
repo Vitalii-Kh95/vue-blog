@@ -4,6 +4,7 @@ import { computed, ref, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePostStore } from '@/stores/PostStore';
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
+import type { GetPostsParams } from '@/types';
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const route = useRoute();
@@ -22,7 +23,9 @@ const buttonAmount = computed(() => {
 });
 
 const pageButtonsDisplayed = computed(() => {
+  if (!postStore.pageCount) return;
   if (postStore.pageCount <= 1) return;
+  if (!postStore.currentPage) return;
 
   const ButtonAmount = Math.min(buttonAmount.value, postStore.pageCount);
 
@@ -78,7 +81,7 @@ watch(
     await nextTick();
 
     // Only seed if posts exist
-    if (postStore.pageCount > 1 && !seeded.value) {
+    if (Number(postStore.pageCount) > 1) {
       const vueState = window.history.state || {};
       if (!vueState.pagination) {
         // Only replaceState here
@@ -101,7 +104,10 @@ watch(
   { immediate: true, flush: 'post' }
 );
 
-async function withPaginationHandler(fn, args) {
+async function withPaginationHandler(
+  fn: (args?: Partial<GetPostsParams>) => Promise<void>,
+  args: Partial<GetPostsParams> | undefined = undefined
+) {
   // I can't really get arguments which end up in function.
   // So I will work with aftermath (postStore states and URL)
   await (args !== undefined ? fn(args) : fn());
@@ -123,7 +129,11 @@ async function withPaginationHandler(fn, args) {
 </script>
 
 <template>
-  <nav v-show="postStore.pageCount > 1" aria-label="Paginate me" data-test="pagination-navigation">
+  <nav
+    v-show="(postStore.pageCount as number) > 1"
+    aria-label="Paginate me"
+    data-test="pagination-navigation"
+  >
     <ul class="flex gap-x-0.5 sm:gap-x-1">
       <PaginationButton
         data-test="pagination-first-button"
@@ -137,7 +147,10 @@ async function withPaginationHandler(fn, args) {
         :disabled="!postStore.previousPage"
         @click="withPaginationHandler(postStore.getPreviousPage)"
       />
-      <li v-for="n in pageButtonsDisplayed" :key="n">
+      <li
+        v-for="n in pageButtonsDisplayed"
+        :key="n"
+      >
         <button
           v-if="n !== postStore.currentPage"
           data-test="pagination-page-button"
@@ -146,8 +159,8 @@ async function withPaginationHandler(fn, args) {
             withPaginationHandler(postStore.getPosts, {
               limit: pageSize,
               offset: (n - 1) * pageSize,
-              search: route.query.q,
-              tag: route.name === 'blog-posts-by-tag' ? route.params.slug : undefined
+              search: String(route.query.q),
+              tag: route.name === 'blog-posts-by-tag' ? String(route.params.slug) : undefined
             })
           "
         >
@@ -176,9 +189,9 @@ async function withPaginationHandler(fn, args) {
           withPaginationHandler(postStore.getPosts, {
             limit: pageSize,
             offset:
-              postStore.count % pageSize > 0
-                ? postStore.count - (postStore.count % pageSize)
-                : postStore.count - pageSize
+              (postStore.count as number) % pageSize > 0
+                ? (postStore.count as number) - ((postStore.count as number) % pageSize)
+                : (postStore.count as number) - pageSize
           })
         "
       />

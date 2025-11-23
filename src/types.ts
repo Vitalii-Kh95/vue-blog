@@ -1,5 +1,16 @@
 // You can write types for your project here.
 
+export interface ErrorResponse {
+  detail: string;
+}
+
+export interface RegisterErrorResponse {
+  username?: string;
+  email?: string;
+  password?: string;
+  non_field_errors?: string;
+}
+
 export interface GetPostsParams {
   limit?: number;
   offset?: number;
