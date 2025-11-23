@@ -12,7 +12,7 @@ import type { Post } from '@/types';
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const postStore = usePostStore();
-await postStore.getPosts({ limit: 5 });
+void postStore.getPosts({ limit: 5 });
 
 const postsForAsideBlock = computed<Post[] | null>(() => {
   const filteredPosts = postStore.posts.filter((post) => post.slug !== route.params.slug);

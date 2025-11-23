@@ -104,10 +104,13 @@ watch(
   { immediate: true, flush: 'post' }
 );
 
+// I tried to write correct signature, but I failed.
+// The thing is, when there are GetPostsParams args, search and tag keys must be proccessed,
+// but they may or may not resolve to undefined in the end...
 async function withPaginationHandler(
-  fn: (args?: Partial<GetPostsParams>) => Promise<void>,
-  args: Partial<GetPostsParams> | undefined = undefined
-) {
+  fn: (args?: GetPostsParams) => Promise<void>,
+  args?: GetPostsParams
+): Promise<void> {
   // I can't really get arguments which end up in function.
   // So I will work with aftermath (postStore states and URL)
   await (args !== undefined ? fn(args) : fn());
@@ -135,66 +138,90 @@ async function withPaginationHandler(
     data-test="pagination-navigation"
   >
     <ul class="flex gap-x-0.5 sm:gap-x-1">
-      <PaginationButton
-        data-test="pagination-first-button"
-        label="<<"
-        :disabled="!postStore.previousPage"
-        @click="withPaginationHandler(postStore.getPreviousPage)"
-      />
-      <PaginationButton
-        data-test="pagination-prev-button"
-        label="<"
-        :disabled="!postStore.previousPage"
-        @click="withPaginationHandler(postStore.getPreviousPage)"
-      />
+      <li>
+        <PaginationButton
+          data-test="pagination-first-button"
+          label="<<"
+          :disabled="!postStore.previousPage"
+          @click="
+            withPaginationHandler(postStore.getPosts, {
+              limit: pageSize,
+              offset: 0,
+              search: route.query.q ? String(route.query.q) : undefined,
+              tag:
+                route.name === 'blog-posts-by-tag'
+                  ? route.params.slug
+                    ? String(route.params.slug)
+                    : undefined
+                  : undefined
+            })
+          "
+        />
+      </li>
+      <li>
+        <PaginationButton
+          data-test="pagination-prev-button"
+          label="<"
+          :disabled="!postStore.previousPage"
+          @click="withPaginationHandler(postStore.getPreviousPage)"
+        />
+      </li>
       <li
         v-for="n in pageButtonsDisplayed"
         :key="n"
       >
         <button
-          v-if="n !== postStore.currentPage"
+          :disabled="n === postStore.currentPage"
           data-test="pagination-page-button"
           class="btn btn-square btn-ghost btn-sm text-sm active:bg-secondary"
           @click="
             withPaginationHandler(postStore.getPosts, {
               limit: pageSize,
               offset: (n - 1) * pageSize,
-              search: String(route.query.q),
-              tag: route.name === 'blog-posts-by-tag' ? String(route.params.slug) : undefined
+              search: route.query.q ? String(route.query.q) : undefined,
+              tag:
+                route.name === 'blog-posts-by-tag'
+                  ? route.params.slug
+                    ? String(route.params.slug)
+                    : undefined
+                  : undefined
             })
           "
         >
           {{ n }}
         </button>
-        <!-- keep bg-secondary. Somehow button happen to become muted faster than active status works on not disabled button (above). That's strange -->
-        <button
-          v-if="n === postStore.currentPage"
-          data-test="pagination-current-page-button"
-          class="btn btn-disabled btn-ghost btn-sm text-sm active:bg-secondary"
-        >
-          {{ n }}
-        </button>
       </li>
-      <PaginationButton
-        data-test="pagination-next-button"
-        label=">"
-        :disabled="!postStore.nextPage"
-        @click="withPaginationHandler(postStore.getNextPage)"
-      />
-      <PaginationButton
-        data-test="pagination-last-button"
-        label=">>"
-        :disabled="!postStore.nextPage"
-        @click="
-          withPaginationHandler(postStore.getPosts, {
-            limit: pageSize,
-            offset:
-              (postStore.count as number) % pageSize > 0
-                ? (postStore.count as number) - ((postStore.count as number) % pageSize)
-                : (postStore.count as number) - pageSize
-          })
-        "
-      />
+      <li>
+        <PaginationButton
+          data-test="pagination-next-button"
+          label=">"
+          :disabled="!postStore.nextPage"
+          @click="withPaginationHandler(postStore.getNextPage)"
+        />
+      </li>
+      <li>
+        <PaginationButton
+          data-test="pagination-last-button"
+          label=">>"
+          :disabled="!postStore.nextPage"
+          @click="
+            withPaginationHandler(postStore.getPosts, {
+              limit: pageSize,
+              offset:
+                (postStore.count as number) % pageSize > 0
+                  ? (postStore.count as number) - ((postStore.count as number) % pageSize)
+                  : (postStore.count as number) - pageSize,
+              search: route.query.q ? String(route.query.q) : undefined,
+              tag:
+                route.name === 'blog-posts-by-tag'
+                  ? route.params.slug
+                    ? String(route.params.slug)
+                    : undefined
+                  : undefined
+            })
+          "
+        />
+      </li>
     </ul>
   </nav>
 </template>

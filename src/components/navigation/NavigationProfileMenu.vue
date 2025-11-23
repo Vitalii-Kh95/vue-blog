@@ -5,7 +5,7 @@ import SignUpModal from '@/components/navigation/TheSignUpModal.vue';
 import { useUserStore } from '@/stores/UserStore';
 
 const userStore = useUserStore();
-await userStore.fetchUserState();
+void userStore.fetchUserState();
 
 const signInModal = ref<HTMLDialogElement | null>(null);
 const signUpModal = ref<HTMLDialogElement | null>(null);

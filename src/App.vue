@@ -6,7 +6,7 @@ import { defineAsyncComponent, onBeforeUnmount, onMounted } from 'vue';
 
 const healthStore = useHealthStore();
 
-await healthStore.fetchHealthStatus();
+void healthStore.fetchHealthStatus();
 
 const PopupManager = defineAsyncComponent(() => import('@/components/PopupManager.vue'));
 
