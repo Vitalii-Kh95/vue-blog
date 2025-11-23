@@ -3,7 +3,9 @@
     "include": [
         "src/**/*",
         "src/**/*.vue",
-        "env.d.ts"
+        "env.d.ts",
+        "eslint.config.ts",
+        "vite.config.ts"
     ],
     "exclude": [
         "node_modules",
